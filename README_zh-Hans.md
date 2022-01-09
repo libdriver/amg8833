@@ -1,10 +1,12 @@
+[English](/README.md) | [ 简体中文](/README_zh-Hans.md) | [繁體中文](/README_zh-Hant.md)
+
 <div align=center>
 <img src="/doc/image/logo.png"/>
 </div>
 
 ## LibDriver AMG8833
 
-[English](/README.md) | [ 简体中文](/README_zh-Hans.md) | [繁體中文](/README_zh-Hant.md)
+[![API](https://img.shields.io/badge/api-reference-blue)](https://www.libdriver.com/docs/amg8833/index.html) [![License](https://img.shields.io/badge/license-MIT-brightgreen.svg)](/LICENSE)
 
 AMG8833红外阵列传感器是一种热电堆型红外传感器，可检测红外线量。以下条件通常会降低温度精度。请仔细检查实际使用条件下的性能和稳定性，并在必要时进行温度校正。 (1) 当传感器安装位置附近存在发热元件时。 (2) 当传感器暴露在热源附近。(3) 传感器本体温度急剧变化时。 (4) 传感器和检测对象之间存在难以透过远红外线的物质（例如玻璃、丙烯酸树脂或蒸汽）时。 (5) 当与传感器贴合的部分存在难以透过远红外线物质（例如，异物或水）。AMG8833可用于高性能家电、办公节能、数字标牌、自动门等。 
 

@@ -1,10 +1,12 @@
+[English](/README.md) | [ 简体中文](/README_zh-Hans.md) | [繁體中文](/README_zh-Hant.md)
+
 <div align=center>
 <img src="/doc/image/logo.png"/>
 </div>
 
 ## LibDriver AMG8833
 
-[English](/README.md) | [ 简体中文](/README_zh-Hans.md) | [繁體中文](/README_zh-Hant.md)
+[![API](https://img.shields.io/badge/api-reference-blue)](https://www.libdriver.com/docs/amg8833/index.html) [![License](https://img.shields.io/badge/license-MIT-brightgreen.svg)](/LICENSE)
 
 AMG8833 Infrared Array Sensor is a thermopile type infrared sensor which detects the amount of infrared rays. Below conditions generally degrade the temperature accuracy.Carefully check the performance and stability under actual use conditions, and perform temperature corrections when necessary.(1) When heating elements exist near the mounting position of the sensor.(2) When the sensor is exposed to cold or hot air.(3) When the temperature of the sensor body rapidly changes. (4) When substances (e.g., glasses, acrylics or steams), which hardly transmit a far infrared ray, exist between the sensor and the detected object.(5) When substances (e.g., foreign substances or water), which hardly transmit a far infrared ray,
 adhere to the lense of the sensor.AMG8833 can be used in high function home appliances, energy saving at office, digital signage, automatic doors and so on.

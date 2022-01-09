@@ -1,10 +1,12 @@
+[English](/README.md) | [ 简体中文](/README_zh-Hans.md) | [繁體中文](/README_zh-Hant.md)
+
 <div align=center>
 <img src="/doc/image/logo.png"/>
 </div>
 
 ## LibDriver AMG8833
 
-[English](/README.md) | [ 简体中文](/README_zh-Hans.md) | [繁體中文](/README_zh-Hant.md)
+[![API](https://img.shields.io/badge/api-reference-blue)](https://www.libdriver.com/docs/amg8833/index.html) [![License](https://img.shields.io/badge/license-MIT-brightgreen.svg)](/LICENSE)
 
 AMG8833紅外陣列傳感器是一種熱電堆型紅外傳感器，可檢測紅外線量。以下條件通常會降低溫度精度。請仔細檢查實際使用條件下的性能和穩定性，並在必要時進行溫度校正。 (1) 當傳感器安裝位置附近存在發熱元件時。 (2) 當傳感器暴露在熱源附近。 (3) 傳感器本體溫度急劇變化時。 (4) 傳感器和檢測對象之間存在難以透過遠紅外線的物質（例如玻璃、丙烯酸樹脂或蒸汽）時。 (5) 當與傳感器貼合的部分存在難以透過遠紅外線物質（例如，異物或水）。 AMG8833可用於高性能家電、辦公節能、數字標牌、自動門等。
 
