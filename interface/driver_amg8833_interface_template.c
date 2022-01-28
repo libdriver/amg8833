@@ -127,14 +127,20 @@ uint8_t amg8833_interface_receive_callback(uint8_t type)
     {
         case AMG8833_STATUS_OVF_THS :
         {
+            amg8833_interface_debug_print("amg8833: irq thermistor temperature output overflow.\n");
+            
             break;
         }
         case AMG8833_STATUS_OVF_IRS :
         {
+            amg8833_interface_debug_print("amg8833: irq temperature output overflow.\n");
+            
             break;
         }
         case AMG8833_STATUS_INTF :
         {
+            amg8833_interface_debug_print("amg8833: irq interrupt outbreak.\n");
+            
             break;
         }
         default :
