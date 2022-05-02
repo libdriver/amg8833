@@ -1,4 +1,4 @@
-[English](/README.md) | [ 简体中文](/README_zh-Hans.md) | [繁體中文](/README_zh-Hant.md)
+[English](/README.md) | [ 简体中文](/README_zh-Hans.md) | [繁體中文](/README_zh-Hant.md) | [日本語](/README_ja.md) | [Deutsch](/README_de.md) | [한국어](/README_ko.md)
 
 <div align=center>
 <img src="/doc/image/logo.png"/>
@@ -6,12 +6,11 @@
 
 ## LibDriver AMG8833
 
-[![API](https://img.shields.io/badge/api-reference-blue)](https://www.libdriver.com/docs/amg8833/index.html) [![License](https://img.shields.io/badge/license-MIT-brightgreen.svg)](/LICENSE)
+[![MISRA](https://img.shields.io/badge/misra-compliant-brightgreen.svg)](/misra/README.md) [![API](https://img.shields.io/badge/api-reference-blue.svg)](https://www.libdriver.com/docs/amg8833/index.html) [![License](https://img.shields.io/badge/license-MIT-brightgreen.svg)](/LICENSE)
 
-AMG8833 Infrared Array Sensor is a thermopile type infrared sensor which detects the amount of infrared rays. Below conditions generally degrade the temperature accuracy.Carefully check the performance and stability under actual use conditions, and perform temperature corrections when necessary.(1) When heating elements exist near the mounting position of the sensor.(2) When the sensor is exposed to cold or hot air.(3) When the temperature of the sensor body rapidly changes. (4) When substances (e.g., glasses, acrylics or steams), which hardly transmit a far infrared ray, exist between the sensor and the detected object.(5) When substances (e.g., foreign substances or water), which hardly transmit a far infrared ray,
-adhere to the lense of the sensor.AMG8833 can be used in high function home appliances, energy saving at office, digital signage, automatic doors and so on.
+AMG8833 Infrared Array Sensor is a thermopile type infrared sensor which detects the amount of infrared rays. Below conditions generally degrade the temperature accuracy.Carefully check the performance and stability under actual use conditions, and perform temperature corrections when necessary.(1) When heating elements exist near the mounting position of the sensor.(2) When the sensor is exposed to cold or hot air.(3) When the temperature of the sensor body rapidly changes. (4) When substances (e.g., glasses, acrylics or steams), which hardly transmit a far infrared ray, exist between the sensor and the detected object.(5) When substances (e.g., foreign substances or water), which hardly transmit a far infrared ray,adhere to the lense of the sensor.AMG8833 can be used in high function home appliances, energy saving at office, digital signage, automatic doors and so on.
 
-LibDriver AMG8833 is a full function driver of AMG8833 launched by LibDriver.It provides temperature reading and temperature array reading functions.
+LibDriver AMG8833 is a full function driver of AMG8833 launched by LibDriver.It provides temperature reading and temperature array reading functions. LibDriver is MISRA compliant.
 
 ### Table of Contents
 
@@ -57,7 +56,7 @@ uint8_t res;
 
 /* init */
 res = amg8833_basic_init(AMG8833_ADDRESS_1);
-if (res)
+if (res != 0)
 {
     return 1;
 }
@@ -75,10 +74,10 @@ for (i = 0; i < times; i++)
 
     /* read temperature array */
     res = amg8833_basic_read_temperature_array(temp);
-    if (res)
+    if (res != 0)
     {
         amg8833_interface_debug_print("amg8833: read temperature array failed.\n");
-        amg8833_basic_deinit();
+        (void)amg8833_basic_deinit();
 
         return 1;
     }
@@ -96,9 +95,9 @@ for (i = 0; i < times; i++)
 
     /* read temperature */
     res = amg8833_basic_read_temperature((float *)&tmp);
-    if (res)
+    if (res != 0)
     {
-        amg8833_basic_deinit();
+        (void)amg8833_basic_deinit();
 
         return 1;
     }
@@ -115,7 +114,9 @@ for (i = 0; i < times; i++)
 
 ...
 
-amg8833_basic_deinit();
+(void)amg8833_basic_deinit();
+
+return 0;
 ```
 #### example interrupt
 
@@ -124,7 +125,7 @@ uint32_t i, times;
 uint8_t res;
 uint8_t (*g_gpio_irq)(void) = NULL;
 
-static uint8_t _callback(uint8_t type)
+static void a_callback(uint8_t type)
 {
     switch (type)
     {
@@ -151,9 +152,9 @@ static uint8_t _callback(uint8_t type)
             
             /* get table */
             res = amg8833_interrupt_get_table((uint8_t (*)[1])table);
-            if (res)
+            if (res != 0)
             {
-                return 1;
+                amg8833_interface_debug_print("amg8833: get table failed.\n");
             }
             else
             {
@@ -162,7 +163,7 @@ static uint8_t _callback(uint8_t type)
                     level = table[i][0];
                     for (j = 0; j < 8; j++)
                     {
-                        if ((level >> (7 - j)) & 0x01)
+                        if (((level >> (7 - j)) & 0x01) != 0)
                         {
                             amg8833_interface_debug_print("%d  ", 1);
                         }
@@ -188,7 +189,7 @@ static uint8_t _callback(uint8_t type)
 
 /* run interrupt test */
 g_gpio_irq = amg8833_interrupt_irq_handler;
-if (gpio_interrupt_init())
+if (gpio_interrupt_init() != 0)
 {
     g_gpio_irq = NULL;
 }
@@ -201,10 +202,10 @@ if (interrupt_interrupt_init(addr,
                              32.0f,
                              25.0f,
                              28.0f,
-                             _callback))
+                             a_callback) != 0)
 {
     g_gpio_irq = NULL;
-    gpio_interrupt_deinit();
+    (void)gpio_interrupt_deinit();
 
     return 1;
 }
@@ -215,14 +216,14 @@ if (interrupt_interrupt_init(addr,
 amg8833_interface_delay_ms(1000);
 for (i = 0; i < times; i++)
 {
-    volatile float temp;
+    float temp;
 
     res = amg8833_interrupt_read_temperature((float *)&temp);
-    if (res)
+    if (res != 0)
     {
-        amg8833_interrupt_deinit();
+        (void)amg8833_interrupt_deinit();
         g_gpio_irq = NULL;
-        gpio_interrupt_deinit();
+        (void)gpio_interrupt_deinit();
     }
     else
     {
@@ -238,9 +239,11 @@ for (i = 0; i < times; i++)
 ...
 
 /* deinit */
-amg8833_interrupt_deinit();
+(void)amg8833_interrupt_deinit();
 g_gpio_irq = NULL;
-gpio_interrupt_deinit();
+(void)gpio_interrupt_deinit();
+
+return 0;
 ```
 ### Document
 

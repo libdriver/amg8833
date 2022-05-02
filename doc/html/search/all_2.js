@@ -1,6 +1,6 @@
 var searchData=
 [
-  ['debug_5fprint_121',['debug_print',['../structamg8833__handle__s.html#a75f9f50c23e87e9407f9ec4e34bb42f2',1,'amg8833_handle_s']]],
+  ['debug_5fprint_121',['debug_print',['../structamg8833__handle__s.html#a769d5b3a6c14790a0e126e8fe70b384b',1,'amg8833_handle_s']]],
   ['delay_5fms_122',['delay_ms',['../structamg8833__handle__s.html#a406c9433252b7366de417b7a60915c81',1,'amg8833_handle_s']]],
   ['driver_5famg8833_2ec_123',['driver_amg8833.c',['../driver__amg8833_8c.html',1,'']]],
   ['driver_5famg8833_2eh_124',['driver_amg8833.h',['../driver__amg8833_8h.html',1,'']]],

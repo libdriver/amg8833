@@ -49,12 +49,12 @@ static amg8833_handle_t gs_handle;        /**< amg8833 handle */
  */
 uint8_t amg8833_register_test(amg8833_address_t addr_pin)
 {
-    volatile uint8_t res;
-    volatile int16_t level, level_check;
-    volatile float tmp, tmp_check;
-    volatile uint8_t status;
-    volatile uint8_t i, j;
-    volatile uint8_t table[8][1];
+    uint8_t res;
+    int16_t level, level_check;
+    float tmp, tmp_check;
+    uint8_t status;
+    uint8_t i, j;
+    uint8_t table[8][1];
     amg8833_info_t info;
     amg8833_address_t addr;
     amg8833_mode_t mode;
@@ -75,7 +75,7 @@ uint8_t amg8833_register_test(amg8833_address_t addr_pin)
     
     /* get information */
     res = amg8833_info(&info);
-    if (res)
+    if (res != 0)
     {
         amg8833_interface_debug_print("amg8833: get info failed.\n");
        
@@ -103,7 +103,7 @@ uint8_t amg8833_register_test(amg8833_address_t addr_pin)
     
     /* address_0 */
     res = amg8833_set_addr_pin(&gs_handle, AMG8833_ADDRESS_0);
-    if (res)
+    if (res != 0)
     {
         amg8833_interface_debug_print("amg8833: set addr pin failed.\n");
        
@@ -111,7 +111,7 @@ uint8_t amg8833_register_test(amg8833_address_t addr_pin)
     }
     amg8833_interface_debug_print("amg8833: set addr pin address 0.\n");
     res = amg8833_get_addr_pin(&gs_handle, &addr);
-    if (res)
+    if (res != 0)
     {
         amg8833_interface_debug_print("amg8833: get addr pin failed.\n");
        
@@ -121,7 +121,7 @@ uint8_t amg8833_register_test(amg8833_address_t addr_pin)
     
     /* address_1 */
     res = amg8833_set_addr_pin(&gs_handle, AMG8833_ADDRESS_1);
-    if (res)
+    if (res != 0)
     {
         amg8833_interface_debug_print("amg8833: set addr pin failed.\n");
        
@@ -129,7 +129,7 @@ uint8_t amg8833_register_test(amg8833_address_t addr_pin)
     }
     amg8833_interface_debug_print("amg8833: set addr pin address 1.\n");
     res = amg8833_get_addr_pin(&gs_handle, &addr);
-    if (res)
+    if (res != 0)
     {
         amg8833_interface_debug_print("amg8833: get addr pin failed.\n");
        
@@ -139,7 +139,7 @@ uint8_t amg8833_register_test(amg8833_address_t addr_pin)
     
     /* set the address */
     res = amg8833_set_addr_pin(&gs_handle, addr_pin);
-    if (res)
+    if (res != 0)
     {
         amg8833_interface_debug_print("amg8833: set addr pin failed.\n");
        
@@ -148,7 +148,7 @@ uint8_t amg8833_register_test(amg8833_address_t addr_pin)
     
     /* init */
     res = amg8833_init(&gs_handle);
-    if (res)
+    if (res != 0)
     {
         amg8833_interface_debug_print("amg8833: init failed.\n");
        
@@ -160,20 +160,20 @@ uint8_t amg8833_register_test(amg8833_address_t addr_pin)
 
     /* sleep mode */
     res = amg8833_set_mode(&gs_handle, AMG8833_MODE_SLEEP);
-    if (res)
+    if (res != 0)
     {
         amg8833_interface_debug_print("amg8833: set mode failed.\n");
-        amg8833_deinit(&gs_handle);
+        (void)amg8833_deinit(&gs_handle);
        
         return 1;
     }
     amg8833_interface_debug_print("amg8833: set sleep mode.\n");
     amg8833_interface_delay_ms(50);
     res = amg8833_get_mode(&gs_handle, &mode);
-    if (res)
+    if (res != 0)
     {
         amg8833_interface_debug_print("amg8833: get mode failed.\n");
-        amg8833_deinit(&gs_handle);
+        (void)amg8833_deinit(&gs_handle);
        
         return 1;
     }
@@ -181,10 +181,10 @@ uint8_t amg8833_register_test(amg8833_address_t addr_pin)
     
     /* set normal mode */
     res = amg8833_set_mode(&gs_handle, AMG8833_MODE_NORMAL);
-    if (res)
+    if (res != 0)
     {
         amg8833_interface_debug_print("amg8833: set mode failed.\n");
-        amg8833_deinit(&gs_handle);
+        (void)amg8833_deinit(&gs_handle);
        
         return 1;
     }
@@ -192,19 +192,19 @@ uint8_t amg8833_register_test(amg8833_address_t addr_pin)
     
     /* stand by 60s mode */
     res = amg8833_set_mode(&gs_handle, AMG8833_MODE_STAND_BY_60S);
-    if (res)
+    if (res != 0)
     {
         amg8833_interface_debug_print("amg8833: set mode failed.\n");
-        amg8833_deinit(&gs_handle);
+        (void)amg8833_deinit(&gs_handle);
        
         return 1;
     }
     amg8833_interface_debug_print("amg8833: set stand by 60s mode.\n");
     res = amg8833_get_mode(&gs_handle, &mode);
-    if (res)
+    if (res != 0)
     {
         amg8833_interface_debug_print("amg8833: get mode failed.\n");
-        amg8833_deinit(&gs_handle);
+        (void)amg8833_deinit(&gs_handle);
        
         return 1;
     }
@@ -212,19 +212,19 @@ uint8_t amg8833_register_test(amg8833_address_t addr_pin)
     
     /* stand by 10s mode */
     res = amg8833_set_mode(&gs_handle, AMG8833_MODE_STAND_BY_10S);
-    if (res)
+    if (res != 0)
     {
         amg8833_interface_debug_print("amg8833: set mode failed.\n");
-        amg8833_deinit(&gs_handle);
+        (void)amg8833_deinit(&gs_handle);
        
         return 1;
     }
     amg8833_interface_debug_print("amg8833: set stand by 10s mode.\n");
     res = amg8833_get_mode(&gs_handle, &mode);
-    if (res)
+    if (res != 0)
     {
         amg8833_interface_debug_print("amg8833: get mode failed.\n");
-        amg8833_deinit(&gs_handle);
+        (void)amg8833_deinit(&gs_handle);
        
         return 1;
     }
@@ -232,19 +232,19 @@ uint8_t amg8833_register_test(amg8833_address_t addr_pin)
     
     /* normal mode */
     res = amg8833_set_mode(&gs_handle, AMG8833_MODE_NORMAL);
-    if (res)
+    if (res != 0)
     {
         amg8833_interface_debug_print("amg8833: set mode failed.\n");
-        amg8833_deinit(&gs_handle);
+        (void)amg8833_deinit(&gs_handle);
        
         return 1;
     }
     amg8833_interface_debug_print("amg8833: set normal mode.\n");
     res = amg8833_get_mode(&gs_handle, &mode);
-    if (res)
+    if (res != 0)
     {
         amg8833_interface_debug_print("amg8833: get mode failed.\n");
-        amg8833_deinit(&gs_handle);
+        (void)amg8833_deinit(&gs_handle);
        
         return 1;
     }
@@ -255,19 +255,19 @@ uint8_t amg8833_register_test(amg8833_address_t addr_pin)
     
     /* 10 fps */
     res = amg8833_set_frame_rate(&gs_handle, AMG8833_FRAME_RATE_10_FPS);
-    if (res)
+    if (res != 0)
     {
         amg8833_interface_debug_print("amg8833: set frame rate failed.\n");
-        amg8833_deinit(&gs_handle);
+        (void)amg8833_deinit(&gs_handle);
        
         return 1;
     }
     amg8833_interface_debug_print("amg8833: set 10 fps.\n");
     res = amg8833_get_frame_rate(&gs_handle, &rate);
-    if (res)
+    if (res != 0)
     {
         amg8833_interface_debug_print("amg8833: get frame rate failed.\n");
-        amg8833_deinit(&gs_handle);
+        (void)amg8833_deinit(&gs_handle);
        
         return 1;
     }
@@ -275,19 +275,19 @@ uint8_t amg8833_register_test(amg8833_address_t addr_pin)
     
     /* 1 fps */
     res = amg8833_set_frame_rate(&gs_handle, AMG8833_FRAME_RATE_1_FPS);
-    if (res)
+    if (res != 0)
     {
         amg8833_interface_debug_print("amg8833: set frame rate failed.\n");
-        amg8833_deinit(&gs_handle);
+        (void)amg8833_deinit(&gs_handle);
        
         return 1;
     }
     amg8833_interface_debug_print("amg8833: set 1 fps.\n");
     res = amg8833_get_frame_rate(&gs_handle, &rate);
-    if (res)
+    if (res != 0)
     {
         amg8833_interface_debug_print("amg8833: get frame rate failed.\n");
-        amg8833_deinit(&gs_handle);
+        (void)amg8833_deinit(&gs_handle);
        
         return 1;
     }
@@ -298,19 +298,19 @@ uint8_t amg8833_register_test(amg8833_address_t addr_pin)
     
     /* diff */
     res = amg8833_set_interrupt_mode(&gs_handle, AMG8833_INTERRUPT_MODE_DIFFERENCE);
-    if (res)
+    if (res != 0)
     {
         amg8833_interface_debug_print("amg8833: set interrupt mode failed.\n");
-        amg8833_deinit(&gs_handle);
+        (void)amg8833_deinit(&gs_handle);
        
         return 1;
     }
     amg8833_interface_debug_print("amg8833: set difference interrupt mode.\n");
     res = amg8833_get_interrupt_mode(&gs_handle, &interrupt_mode);
-    if (res)
+    if (res != 0)
     {
         amg8833_interface_debug_print("amg8833: get interrupt mode failed.\n");
-        amg8833_deinit(&gs_handle);
+        (void)amg8833_deinit(&gs_handle);
        
         return 1;
     }
@@ -318,19 +318,19 @@ uint8_t amg8833_register_test(amg8833_address_t addr_pin)
     
     /* abs */
     res = amg8833_set_interrupt_mode(&gs_handle, AMG8833_INTERRUPT_MODE_ABSOLUTE);
-    if (res)
+    if (res != 0)
     {
         amg8833_interface_debug_print("amg8833: set interrupt mode failed.\n");
-        amg8833_deinit(&gs_handle);
+        (void)amg8833_deinit(&gs_handle);
        
         return 1;
     }
     amg8833_interface_debug_print("amg8833: set absolute value interrupt mode.\n");
     res = amg8833_get_interrupt_mode(&gs_handle, &interrupt_mode);
-    if (res)
+    if (res != 0)
     {
         amg8833_interface_debug_print("amg8833: get interrupt mode failed.\n");
-        amg8833_deinit(&gs_handle);
+        (void)amg8833_deinit(&gs_handle);
        
         return 1;
     }
@@ -341,19 +341,19 @@ uint8_t amg8833_register_test(amg8833_address_t addr_pin)
     
     /* disable */
     res = amg8833_set_interrupt(&gs_handle, AMG8833_BOOL_FALSE);
-    if (res)
+    if (res != 0)
     {
         amg8833_interface_debug_print("amg8833: set interrupt failed.\n");
-        amg8833_deinit(&gs_handle);
+        (void)amg8833_deinit(&gs_handle);
        
         return 1;
     }
     amg8833_interface_debug_print("amg8833: disable interrupt mode.\n");
     res = amg8833_get_interrupt(&gs_handle, &enable);
-    if (res)
+    if (res != 0)
     {
         amg8833_interface_debug_print("amg8833: get interrupt failed.\n");
-        amg8833_deinit(&gs_handle);
+        (void)amg8833_deinit(&gs_handle);
        
         return 1;
     }
@@ -361,19 +361,19 @@ uint8_t amg8833_register_test(amg8833_address_t addr_pin)
     
     /* enable */
     res = amg8833_set_interrupt(&gs_handle, AMG8833_BOOL_TRUE);
-    if (res)
+    if (res != 0)
     {
         amg8833_interface_debug_print("amg8833: set interrupt failed.\n");
-        amg8833_deinit(&gs_handle);
+        (void)amg8833_deinit(&gs_handle);
        
         return 1;
     }
     amg8833_interface_debug_print("amg8833: enable interrupt mode.\n");
     res = amg8833_get_interrupt(&gs_handle, &enable);
-    if (res)
+    if (res != 0)
     {
         amg8833_interface_debug_print("amg8833: get interrupt failed.\n");
-        amg8833_deinit(&gs_handle);
+        (void)amg8833_deinit(&gs_handle);
        
         return 1;
     }
@@ -384,19 +384,19 @@ uint8_t amg8833_register_test(amg8833_address_t addr_pin)
     
     /* once mode */
     res = amg8833_set_average_mode(&gs_handle, AMG8833_AVERAGE_MODE_ONCE);
-    if (res)
+    if (res != 0)
     {
         amg8833_interface_debug_print("amg8833: set average mode failed.\n");
-        amg8833_deinit(&gs_handle);
+        (void)amg8833_deinit(&gs_handle);
        
         return 1;
     }
     amg8833_interface_debug_print("amg8833: set once average mode.\n");
     res = amg8833_get_average_mode(&gs_handle, &avg_mode);
-    if (res)
+    if (res != 0)
     {
         amg8833_interface_debug_print("amg8833: get average mode failed.\n");
-        amg8833_deinit(&gs_handle);
+        (void)amg8833_deinit(&gs_handle);
        
         return 1;
     }
@@ -404,19 +404,19 @@ uint8_t amg8833_register_test(amg8833_address_t addr_pin)
     
     /* twice mode */
     res = amg8833_set_average_mode(&gs_handle, AMG8833_AVERAGE_MODE_TWICE);
-    if (res)
+    if (res != 0)
     {
         amg8833_interface_debug_print("amg8833: set average mode failed.\n");
-        amg8833_deinit(&gs_handle);
+        (void)amg8833_deinit(&gs_handle);
        
         return 1;
     }
     amg8833_interface_debug_print("amg8833: set twice average mode.\n");
     res = amg8833_get_average_mode(&gs_handle, &avg_mode);
-    if (res)
+    if (res != 0)
     {
         amg8833_interface_debug_print("amg8833: get average mode failed.\n");
-        amg8833_deinit(&gs_handle);
+        (void)amg8833_deinit(&gs_handle);
        
         return 1;
     }
@@ -427,19 +427,19 @@ uint8_t amg8833_register_test(amg8833_address_t addr_pin)
     
     level = rand() % 2048;
     res = amg8833_set_interrupt_high_level(&gs_handle, level);
-    if (res)
+    if (res != 0)
     {
         amg8833_interface_debug_print("amg8833: set interrupt high level failed.\n");
-        amg8833_deinit(&gs_handle);
+        (void)amg8833_deinit(&gs_handle);
        
         return 1;
     }
     amg8833_interface_debug_print("amg8833: set interrupt high level %d.\n", level);
     res = amg8833_get_interrupt_high_level(&gs_handle, (int16_t *)&level_check);
-    if (res)
+    if (res != 0)
     {
         amg8833_interface_debug_print("amg8833: get interrupt high level failed.\n");
-        amg8833_deinit(&gs_handle);
+        (void)amg8833_deinit(&gs_handle);
        
         return 1;
     }
@@ -450,19 +450,19 @@ uint8_t amg8833_register_test(amg8833_address_t addr_pin)
     
     level = -(rand() % 2048);
     res = amg8833_set_interrupt_low_level(&gs_handle, level);
-    if (res)
+    if (res != 0)
     {
         amg8833_interface_debug_print("amg8833: set interrupt low level failed.\n");
-        amg8833_deinit(&gs_handle);
+        (void)amg8833_deinit(&gs_handle);
        
         return 1;
     }
     amg8833_interface_debug_print("amg8833: set interrupt low level %d.\n", level);
     res = amg8833_get_interrupt_low_level(&gs_handle, (int16_t *)&level_check);
-    if (res)
+    if (res != 0)
     {
         amg8833_interface_debug_print("amg8833: get interrupt low level failed.\n");
-        amg8833_deinit(&gs_handle);
+        (void)amg8833_deinit(&gs_handle);
        
         return 1;
     }
@@ -473,19 +473,19 @@ uint8_t amg8833_register_test(amg8833_address_t addr_pin)
     
     level = -(rand() % 2048);
     res = amg8833_set_interrupt_hysteresis_level(&gs_handle, level);
-    if (res)
+    if (res != 0)
     {
         amg8833_interface_debug_print("amg8833: set interrupt hysteresis level failed.\n");
-        amg8833_deinit(&gs_handle);
+        (void)amg8833_deinit(&gs_handle);
        
         return 1;
     }
     amg8833_interface_debug_print("amg8833: set interrupt hysteresis level %d.\n", level);
     res = amg8833_get_interrupt_hysteresis_level(&gs_handle, (int16_t *)&level_check);
-    if (res)
+    if (res != 0)
     {
         amg8833_interface_debug_print("amg8833: get interrupt hysteresis level failed.\n");
-        amg8833_deinit(&gs_handle);
+        (void)amg8833_deinit(&gs_handle);
        
         return 1;
     }
@@ -496,19 +496,19 @@ uint8_t amg8833_register_test(amg8833_address_t addr_pin)
     
     tmp = (float)(rand() % 5000) / 100.0f;
     res = amg8833_interrupt_level_convert_to_register(&gs_handle, tmp, (int16_t *)&level);
-    if (res)
+    if (res != 0)
     {
         amg8833_interface_debug_print("amg8833: interrupt level convert to register failed.\n");
-        amg8833_deinit(&gs_handle);
+        (void)amg8833_deinit(&gs_handle);
        
         return 1;
     }
     amg8833_interface_debug_print("amg8833: generated temperature is %0.2f.\n", tmp);
     res = amg8833_interrupt_level_convert_to_data(&gs_handle, level, (float *)&tmp_check);
-    if (res)
+    if (res != 0)
     {
         amg8833_interface_debug_print("amg8833: interrupt level convert to data failed.\n");
-        amg8833_deinit(&gs_handle);
+        (void)amg8833_deinit(&gs_handle);
        
         return 1;
     }
@@ -518,10 +518,10 @@ uint8_t amg8833_register_test(amg8833_address_t addr_pin)
     amg8833_interface_debug_print("amg8833: amg8833_get_status test.\n");
     
     res = amg8833_get_status(&gs_handle, (uint8_t *)&status);
-    if (res)
+    if (res != 0)
     {
         amg8833_interface_debug_print("amg8833: get status failed.\n");
-        amg8833_deinit(&gs_handle);
+        (void)amg8833_deinit(&gs_handle);
        
         return 1;
     }
@@ -532,10 +532,10 @@ uint8_t amg8833_register_test(amg8833_address_t addr_pin)
     
     /* thermistor temperature output overflow */
     res = amg8833_clear_status(&gs_handle, AMG8833_STATUS_OVF_THS);
-    if (res)
+    if (res != 0)
     {
         amg8833_interface_debug_print("amg8833: clear status failed.\n");
-        amg8833_deinit(&gs_handle);
+        (void)amg8833_deinit(&gs_handle);
        
         return 1;
     }
@@ -543,10 +543,10 @@ uint8_t amg8833_register_test(amg8833_address_t addr_pin)
     
     /* temperature output overflow */
     res = amg8833_clear_status(&gs_handle, AMG8833_STATUS_OVF_IRS);
-    if (res)
+    if (res != 0)
     {
         amg8833_interface_debug_print("amg8833: clear status failed.\n");
-        amg8833_deinit(&gs_handle);
+        (void)amg8833_deinit(&gs_handle);
        
         return 1;
     }
@@ -554,10 +554,10 @@ uint8_t amg8833_register_test(amg8833_address_t addr_pin)
     
     /* interrupt outbreak */
     res = amg8833_clear_status(&gs_handle, AMG8833_STATUS_INTF);
-    if (res)
+    if (res != 0)
     {
         amg8833_interface_debug_print("amg8833: clear status failed.\n");
-        amg8833_deinit(&gs_handle);
+        (void)amg8833_deinit(&gs_handle);
        
         return 1;
     }
@@ -567,10 +567,10 @@ uint8_t amg8833_register_test(amg8833_address_t addr_pin)
     amg8833_interface_debug_print("amg8833: amg8833_get_interrupt_table test.\n");
     
     res = amg8833_get_interrupt_table(&gs_handle, (uint8_t (*)[1])table);
-    if (res)
+    if (res != 0)
     {
         amg8833_interface_debug_print("amg8833: get interrupt table failed.\n");
-        amg8833_deinit(&gs_handle);
+        (void)amg8833_deinit(&gs_handle);
        
         return 1;
     }
@@ -579,7 +579,7 @@ uint8_t amg8833_register_test(amg8833_address_t addr_pin)
         level = table[i][0];
         for (j = 0; j < 8; j++)
         {
-            if ((level >> (7 - j)) & 0x01)
+            if (((level >> (7 - j)) & 0x01) != 0)
             {
                 amg8833_interface_debug_print("%d  ", 1);
             }
@@ -596,10 +596,10 @@ uint8_t amg8833_register_test(amg8833_address_t addr_pin)
     
     /* init reset */
     res = amg8833_reset(&gs_handle, AMG8833_RESET_TYPE_INIT);
-    if (res)
+    if (res != 0)
     {
         amg8833_interface_debug_print("amg8833: reset failed.\n");
-        amg8833_deinit(&gs_handle);
+        (void)amg8833_deinit(&gs_handle);
        
         return 1;
     }
@@ -607,10 +607,10 @@ uint8_t amg8833_register_test(amg8833_address_t addr_pin)
     
     /* flag reset */
     res = amg8833_reset(&gs_handle, AMG8833_RESET_TYPE_FLAG);
-    if (res)
+    if (res != 0)
     {
         amg8833_interface_debug_print("amg8833: reset failed.\n");
-        amg8833_deinit(&gs_handle);
+        (void)amg8833_deinit(&gs_handle);
        
         return 1;
     }
@@ -619,7 +619,7 @@ uint8_t amg8833_register_test(amg8833_address_t addr_pin)
     
     /* finish register test */
     amg8833_interface_debug_print("amg8833: finish register test.\n");
-    amg8833_deinit(&gs_handle);
+    (void)amg8833_deinit(&gs_handle);
     
     return 0;
 }

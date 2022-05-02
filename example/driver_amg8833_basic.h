@@ -34,8 +34,8 @@
  * </table>
  */
 
-#ifndef _DRIVER_AMG8833_BASIC_H_
-#define _DRIVER_AMG8833_BASIC_H_
+#ifndef DRIVER_AMG8833_BASIC_H
+#define DRIVER_AMG8833_BASIC_H
 
 #include "driver_amg8833_interface.h"
 
