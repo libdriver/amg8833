@@ -7,5 +7,5 @@ var driver__amg8833__interrupt_8h =
     [ "amg8833_interrupt_irq_handler", "group__amg8833__example__driver.html#ga2209d067136e8de3e68cd4c94dc15903", null ],
     [ "amg8833_interrupt_read_temperature", "group__amg8833__example__driver.html#ga2b90394ed88394f994828c1a26c5675c", null ],
     [ "amg8833_interrupt_read_temperature_array", "group__amg8833__example__driver.html#gab3ca4ce06bf922466e5be85e86eb6b21", null ],
-    [ "interrupt_interrupt_init", "group__amg8833__example__driver.html#ga9363aa27a44bb55617a0956538b3bc9a", null ]
+    [ "interrupt_interrupt_init", "group__amg8833__example__driver.html#ga28774001b94e08141ebccd4b7ce34652", null ]
 ];

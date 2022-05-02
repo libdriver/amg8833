@@ -48,7 +48,7 @@ static amg8833_handle_t gs_handle;        /**< amg8833 handle */
  */
 uint8_t amg8833_basic_init(amg8833_address_t addr_pin)
 {
-    volatile uint8_t res;
+    uint8_t res;
     
     /* link interface function */
     DRIVER_AMG8833_LINK_INIT(&gs_handle, amg8833_handle_t);
@@ -62,7 +62,7 @@ uint8_t amg8833_basic_init(amg8833_address_t addr_pin)
     
     /* set the address */
     res = amg8833_set_addr_pin(&gs_handle, addr_pin);
-    if (res)
+    if (res != 0)
     {
         amg8833_interface_debug_print("amg8833: set addr pin failed.\n");
        
@@ -71,7 +71,7 @@ uint8_t amg8833_basic_init(amg8833_address_t addr_pin)
     
     /* init */
     res = amg8833_init(&gs_handle);
-    if (res)
+    if (res != 0)
     {
         amg8833_interface_debug_print("amg8833: init failed.\n");
        
@@ -80,40 +80,40 @@ uint8_t amg8833_basic_init(amg8833_address_t addr_pin)
     
     /* set normal mode */
     res = amg8833_set_mode(&gs_handle, AMG8833_MODE_NORMAL);
-    if (res)
+    if (res != 0)
     {
         amg8833_interface_debug_print("amg8833: set mode failed.\n");
-        amg8833_deinit(&gs_handle);
+        (void)amg8833_deinit(&gs_handle);
        
         return 1;
     }
     
    /* set frame rate */
     res = amg8833_set_frame_rate(&gs_handle, AMG8833_BASIC_DEFAULT_FRAME_RATE);
-    if (res)
+    if (res != 0)
     {
         amg8833_interface_debug_print("amg8833: set frame rate failed.\n");
-        amg8833_deinit(&gs_handle);
+        (void)amg8833_deinit(&gs_handle);
        
         return 1;
     }
 
     /* disable */
     res = amg8833_set_interrupt(&gs_handle, AMG8833_BOOL_FALSE);
-    if (res)
+    if (res != 0)
     {
         amg8833_interface_debug_print("amg8833: set interrupt failed.\n");
-        amg8833_deinit(&gs_handle);
+        (void)amg8833_deinit(&gs_handle);
        
         return 1;
     }
     
     /* set average mode */
     res = amg8833_set_average_mode(&gs_handle, AMG8833_BASIC_DEFAULT_AVERAGE_MODE);
-    if (res)
+    if (res != 0)
     {
         amg8833_interface_debug_print("amg8833: set average mode failed.\n");
-        amg8833_deinit(&gs_handle);
+        (void)amg8833_deinit(&gs_handle);
        
         return 1;
     }
@@ -130,7 +130,7 @@ uint8_t amg8833_basic_init(amg8833_address_t addr_pin)
  */
 uint8_t amg8833_basic_deinit(void)
 {
-    if (amg8833_deinit(&gs_handle))
+    if (amg8833_deinit(&gs_handle) != 0)
     {
         return 1;
     }
@@ -150,10 +150,10 @@ uint8_t amg8833_basic_deinit(void)
  */
 uint8_t amg8833_basic_read_temperature_array(float temp[8][8])
 {
-    volatile int16_t raw[8][8];
+    int16_t raw[8][8];
     
     /* read temperature array */
-    if (amg8833_read_temperature_array(&gs_handle, (int16_t (*)[8])raw, temp))
+    if (amg8833_read_temperature_array(&gs_handle, (int16_t (*)[8])raw, temp) != 0)
     {
         return 1;
     }
@@ -173,10 +173,10 @@ uint8_t amg8833_basic_read_temperature_array(float temp[8][8])
  */
 uint8_t amg8833_basic_read_temperature(float *temp)
 {
-    volatile int16_t raw;
+    int16_t raw;
     
     /* read temperature */
-    if (amg8833_read_temperature(&gs_handle, (int16_t *)&raw, (float *)temp))
+    if (amg8833_read_temperature(&gs_handle, (int16_t *)&raw, (float *)temp) != 0)
     {
         return 1;
     }

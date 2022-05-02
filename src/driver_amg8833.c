@@ -88,9 +88,16 @@
  *             - 1 read failed
  * @note       none
  */
-static uint8_t _amg8833_iic_read(amg8833_handle_t *handle, uint8_t reg, uint8_t *data, uint16_t len)
+static uint8_t a_amg8833_iic_read(amg8833_handle_t *handle, uint8_t reg, uint8_t *data, uint16_t len)
 {
-    return handle->iic_read(handle->iic_addr, reg, data, len);        /* read the register */
+    if (handle->iic_read(handle->iic_addr, reg, data, len) != 0)        /* read the register */
+    {
+        return 1;                                                       /* return error */
+    }
+    else
+    {
+        return 0;                                                       /* success return 0 */
+    }
 }
 
 /**
@@ -104,9 +111,16 @@ static uint8_t _amg8833_iic_read(amg8833_handle_t *handle, uint8_t reg, uint8_t 
  *            - 1 write failed
  * @note      none
  */
-static uint8_t _amg8833_iic_write(amg8833_handle_t *handle, uint8_t reg, uint8_t *data, uint16_t len)
+static uint8_t a_amg8833_iic_write(amg8833_handle_t *handle, uint8_t reg, uint8_t *data, uint16_t len)
 {
-    return handle->iic_write(handle->iic_addr, reg, data, len);        /* write the register */
+    if (handle->iic_write(handle->iic_addr, reg, data, len) != 0)       /* write the register */
+    {
+        return 1;                                                       /* return error */
+    }
+    else
+    {
+        return 0;                                                       /* success return 0 */
+    }
 }
 
 /**
@@ -120,14 +134,14 @@ static uint8_t _amg8833_iic_write(amg8833_handle_t *handle, uint8_t reg, uint8_t
  */
 uint8_t amg8833_set_addr_pin(amg8833_handle_t *handle, amg8833_address_t addr_pin)
 {
-    if (handle == NULL)                 /* check handle */
+    if (handle == NULL)                          /* check handle */
     {
-        return 2;                       /* return error */
+        return 2;                                /* return error */
     }
     
-    handle->iic_addr = addr_pin;        /* set pin */
+    handle->iic_addr = (uint8_t)addr_pin;        /* set pin */
     
-    return 0;                           /* success return 0 */
+    return 0;                                    /* success return 0 */
 }
 
 /**
@@ -164,7 +178,7 @@ uint8_t amg8833_get_addr_pin(amg8833_handle_t *handle, amg8833_address_t *addr_p
  */
 uint8_t amg8833_init(amg8833_handle_t *handle)
 {
-    volatile uint8_t res, prev;
+    uint8_t res, prev;
   
     if (handle == NULL)                                                             /* check handle */
     {
@@ -210,15 +224,15 @@ uint8_t amg8833_init(amg8833_handle_t *handle)
        
         return 3;                                                                   /* return error */
     }
-    if (handle->iic_init())                                                         /* iic init */
+    if (handle->iic_init() != 0)                                                    /* iic init */
     {
         handle->debug_print("amg8833: iic init failed.\n");                         /* iic init failed */
        
         return 3;                                                                   /* return error */
     }
     prev = 0x00;                                                                    /* normal mode */
-    res = _amg8833_iic_write(handle, AMG8833_REG_PCTL, (uint8_t *)&prev, 1);        /* write pctl register */
-    if (res)                                                                        /* check result */
+    res = a_amg8833_iic_write(handle, AMG8833_REG_PCTL, (uint8_t *)&prev, 1);       /* write pctl register */
+    if (res != 0)                                                                   /* check result */
     {
         handle->debug_print("amg8833: write pctl register failed.\n");              /* write pctl register failed */
        
@@ -226,8 +240,8 @@ uint8_t amg8833_init(amg8833_handle_t *handle)
     }
     handle->delay_ms(50);                                                           /* wait 50 ms */
     prev = 0x3F;                                                                    /* initial reset */
-    res = _amg8833_iic_write(handle, AMG8833_REG_RST, (uint8_t *)&prev, 1);         /* write rst register */
-    if (res)                                                                        /* check result */
+    res = a_amg8833_iic_write(handle, AMG8833_REG_RST, (uint8_t *)&prev, 1);        /* write rst register */
+    if (res != 0)                                                                   /* check result */
     {
         handle->debug_print("amg8833: write rst register failed.\n");               /* write rst register failed */
        
@@ -235,8 +249,8 @@ uint8_t amg8833_init(amg8833_handle_t *handle)
     }
     handle->delay_ms(2);                                                            /* wait 2 ms */
     prev = 0x30;                                                                    /* flag reset */
-    res = _amg8833_iic_write(handle, AMG8833_REG_RST, (uint8_t *)&prev, 1);         /* write rst register */
-    if (res)                                                                        /* check result */
+    res = a_amg8833_iic_write(handle, AMG8833_REG_RST, (uint8_t *)&prev, 1);        /* write rst register */
+    if (res != 0)                                                                   /* check result */
     {
         handle->debug_print("amg8833: write rst register failed.\n");               /* write rst register failed */
        
@@ -260,7 +274,7 @@ uint8_t amg8833_init(amg8833_handle_t *handle)
  */
 uint8_t amg8833_deinit(amg8833_handle_t *handle)
 {
-    volatile uint8_t res, prev;
+    uint8_t res, prev;
     
     if (handle == NULL)                                                             /* check handle */
     {
@@ -272,23 +286,26 @@ uint8_t amg8833_deinit(amg8833_handle_t *handle)
     }
     
     prev = 0x10;                                                                    /* sleep mode*/
-    res = _amg8833_iic_write(handle, AMG8833_REG_PCTL, (uint8_t *)&prev, 1);        /* write pctl register */
-    if (res)                                                                        /* check result */
+    res = a_amg8833_iic_write(handle, AMG8833_REG_PCTL, (uint8_t *)&prev, 1);       /* write pctl register */
+    if (res != 0)                                                                   /* check result */
     {
         handle->debug_print("amg8833: write pctl register failed.\n");              /* write pctl register failed */
        
         return 4;                                                                   /* return error */
     }
     res = handle->iic_deinit();                                                     /* iic deinit */
-    if (res)                                                                        /* check result */
+    if (res != 0)                                                                   /* check result */
     {
         handle->debug_print("amg8833: iic deinit failed.\n");                       /* iic deinit failed */
        
         return 4;                                                                   /* return error */
     }
-    handle->iic_init = 0;                                                           /* flag close */
+    else
+    {
+        handle->iic_init = 0;                                                       /* flag close */
     
-    return 0;                                                                       /* success return 0 */
+        return 0;                                                                   /* success return 0 */
+    }
 }
 
 /**
@@ -303,7 +320,7 @@ uint8_t amg8833_deinit(amg8833_handle_t *handle)
  */
 uint8_t amg8833_irq_handler(amg8833_handle_t *handle)
 {
-    volatile uint8_t res, prev;
+    uint8_t res, prev;
     
     if (handle == NULL)                                                            /* check handle */
     {
@@ -314,37 +331,37 @@ uint8_t amg8833_irq_handler(amg8833_handle_t *handle)
         return 3;                                                                  /* return error */
     }
     
-    res = _amg8833_iic_read(handle, AMG8833_REG_STAT, (uint8_t *)&prev, 1);        /* read stat register */
-    if (res)                                                                       /* check result */
+    res = a_amg8833_iic_read(handle, AMG8833_REG_STAT, (uint8_t *)&prev, 1);       /* read stat register */
+    if (res != 0)                                                                  /* check result */
     {
         handle->debug_print("amg8833: read stat register failed.\n");              /* read stat register failed */
         
         return 1;                                                                  /* return error */
     }
-    res = _amg8833_iic_write(handle, AMG8833_REG_SCLR, (uint8_t *)&prev, 1);       /* write sclr register */
-    if (res)                                                                       /* check result */
+    res = a_amg8833_iic_write(handle, AMG8833_REG_SCLR, (uint8_t *)&prev, 1);      /* write sclr register */
+    if (res != 0)                                                                  /* check result */
     {
         handle->debug_print("amg8833: write sclr register failed.\n");             /* write sclr register failed */
         
         return 1;                                                                  /* return error */
     }
-    if (prev & (1 << AMG8833_STATUS_INTF))                                         /* if interrupt outbreak */
+    if ((prev & (1 << AMG8833_STATUS_INTF)) != 0)                                  /* if interrupt outbreak */
     {
-        if (handle->receive_callback)                                              /* if receive callback */
+        if (handle->receive_callback != NULL)                                      /* if receive callback */
         {
             handle->receive_callback(AMG8833_STATUS_INTF);                         /* run callback */
         }
     }
-    if (prev & (1 << AMG8833_STATUS_OVF_IRS))                                      /* if temperature output overflow */
+    if ((prev & (1 << AMG8833_STATUS_OVF_IRS)) != 0)                               /* if temperature output overflow */
     {
-        if (handle->receive_callback)                                              /* if receive callback */
+        if (handle->receive_callback != NULL)                                      /* if receive callback */
         {
             handle->receive_callback(AMG8833_STATUS_OVF_IRS);                      /* run callback */
         }
     }
-    if (prev & (1 << AMG8833_STATUS_OVF_THS))                                      /* if thermistor temperature output overflow */
+    if ((prev & (1 << AMG8833_STATUS_OVF_THS)) != 0)                               /* if thermistor temperature output overflow */
     {
-        if (handle->receive_callback)                                              /* if receive callback */
+        if (handle->receive_callback != NULL)                                      /* if receive callback */
         {
             handle->receive_callback(AMG8833_STATUS_OVF_THS);                      /* run callback */
         }
@@ -366,8 +383,8 @@ uint8_t amg8833_irq_handler(amg8833_handle_t *handle)
  */
 uint8_t amg8833_set_mode(amg8833_handle_t *handle, amg8833_mode_t mode)
 {
-    volatile uint8_t res;
-    volatile uint8_t prev;
+    uint8_t res;
+    uint8_t prev;
     
     if (handle == NULL)                                                             /* check handle */
     {
@@ -379,8 +396,8 @@ uint8_t amg8833_set_mode(amg8833_handle_t *handle, amg8833_mode_t mode)
     }
     
     prev = mode;                                                                    /* set the prev */
-    res = _amg8833_iic_write(handle, AMG8833_REG_PCTL, (uint8_t *)&prev, 1);        /* write pctl register */
-    if (res)                                                                        /* check result */
+    res = a_amg8833_iic_write(handle, AMG8833_REG_PCTL, (uint8_t *)&prev, 1);       /* write pctl register */
+    if (res != 0)                                                                   /* check result */
     {
         handle->debug_print("amg8833: write pctl register failed.\n");              /* write pctl register failed */
        
@@ -403,8 +420,8 @@ uint8_t amg8833_set_mode(amg8833_handle_t *handle, amg8833_mode_t mode)
  */
 uint8_t amg8833_get_mode(amg8833_handle_t *handle, amg8833_mode_t *mode)
 {
-    volatile uint8_t res;
-    volatile uint8_t prev;
+    uint8_t res;
+    uint8_t prev;
     
     if (handle == NULL)                                                            /* check handle */
     {
@@ -415,8 +432,8 @@ uint8_t amg8833_get_mode(amg8833_handle_t *handle, amg8833_mode_t *mode)
         return 3;                                                                  /* return error */
     }
     
-    res = _amg8833_iic_read(handle, AMG8833_REG_PCTL, (uint8_t *)&prev, 1);        /* read pctl register */
-    if (res)                                                                       /* check result */
+    res = a_amg8833_iic_read(handle, AMG8833_REG_PCTL, (uint8_t *)&prev, 1);       /* read pctl register */
+    if (res != 0)                                                                  /* check result */
     {
         handle->debug_print("amg8833: read pctl register failed.\n");              /* read pctl register failed */
        
@@ -440,8 +457,8 @@ uint8_t amg8833_get_mode(amg8833_handle_t *handle, amg8833_mode_t *mode)
  */
 uint8_t amg8833_reset(amg8833_handle_t *handle, amg8833_reset_type_t type)
 {
-    volatile uint8_t res;
-    volatile uint8_t prev;
+    uint8_t res;
+    uint8_t prev;
     
     if (handle == NULL)                                                            /* check handle */
     {
@@ -453,8 +470,8 @@ uint8_t amg8833_reset(amg8833_handle_t *handle, amg8833_reset_type_t type)
     }
     
     prev = type;                                                                   /* set the prev */
-    res = _amg8833_iic_write(handle, AMG8833_REG_RST, (uint8_t *)&prev, 1);        /* write rst register */
-    if (res)                                                                       /* check result */
+    res = a_amg8833_iic_write(handle, AMG8833_REG_RST, (uint8_t *)&prev, 1);       /* write rst register */
+    if (res != 0)                                                                  /* check result */
     {
         handle->debug_print("amg8833: write rst register failed.\n");              /* write rst register failed */
        
@@ -477,8 +494,8 @@ uint8_t amg8833_reset(amg8833_handle_t *handle, amg8833_reset_type_t type)
  */
 uint8_t amg8833_set_frame_rate(amg8833_handle_t *handle, amg8833_frame_rate_t rate)
 {
-    volatile uint8_t res;
-    volatile uint8_t prev;
+    uint8_t res;
+    uint8_t prev;
     
     if (handle == NULL)                                                            /* check handle */
     {
@@ -489,8 +506,8 @@ uint8_t amg8833_set_frame_rate(amg8833_handle_t *handle, amg8833_frame_rate_t ra
         return 3;                                                                  /* return error */
     }
     
-    res = _amg8833_iic_read(handle, AMG8833_REG_FPSC, (uint8_t *)&prev, 1);        /* read fpsc register */
-    if (res)                                                                       /* check result */
+    res = a_amg8833_iic_read(handle, AMG8833_REG_FPSC, (uint8_t *)&prev, 1);       /* read fpsc register */
+    if (res != 0)                                                                  /* check result */
     {
         handle->debug_print("amg8833: read fpsc register failed.\n");              /* read fpsc register failed */
        
@@ -498,8 +515,8 @@ uint8_t amg8833_set_frame_rate(amg8833_handle_t *handle, amg8833_frame_rate_t ra
     }
     prev &= ~(1 << 0);                                                             /* clear the config */
     prev |= rate << 0;                                                             /* set the config */
-    res = _amg8833_iic_write(handle, AMG8833_REG_FPSC, (uint8_t *)&prev, 1);       /* write fpsc register */
-    if (res)                                                                       /* check result */
+    res = a_amg8833_iic_write(handle, AMG8833_REG_FPSC, (uint8_t *)&prev, 1);      /* write fpsc register */
+    if (res != 0)                                                                  /* check result */
     {
         handle->debug_print("amg8833: write fpsc register failed.\n");             /* write fpsc register failed */
        
@@ -522,8 +539,8 @@ uint8_t amg8833_set_frame_rate(amg8833_handle_t *handle, amg8833_frame_rate_t ra
  */
 uint8_t amg8833_get_frame_rate(amg8833_handle_t *handle, amg8833_frame_rate_t *rate)
 {
-    volatile uint8_t res;
-    volatile uint8_t prev;
+    uint8_t res;
+    uint8_t prev;
     
     if (handle == NULL)                                                            /* check handle */
     {
@@ -534,8 +551,8 @@ uint8_t amg8833_get_frame_rate(amg8833_handle_t *handle, amg8833_frame_rate_t *r
         return 3;                                                                  /* return error */
     }
     
-    res = _amg8833_iic_read(handle, AMG8833_REG_FPSC, (uint8_t *)&prev, 1);        /* read fpsc register */
-    if (res)                                                                       /* check result */
+    res = a_amg8833_iic_read(handle, AMG8833_REG_FPSC, (uint8_t *)&prev, 1);       /* read fpsc register */
+    if (res != 0)                                                                  /* check result */
     {
         handle->debug_print("amg8833: read fpsc register failed.\n");              /* read fpsc register failed */
        
@@ -559,8 +576,8 @@ uint8_t amg8833_get_frame_rate(amg8833_handle_t *handle, amg8833_frame_rate_t *r
  */
 uint8_t amg8833_set_interrupt_mode(amg8833_handle_t *handle, amg8833_interrupt_mode_t mode)
 {
-    volatile uint8_t res;
-    volatile uint8_t prev;
+    uint8_t res;
+    uint8_t prev;
     
     if (handle == NULL)                                                            /* check handle */
     {
@@ -571,8 +588,8 @@ uint8_t amg8833_set_interrupt_mode(amg8833_handle_t *handle, amg8833_interrupt_m
         return 3;                                                                  /* return error */
     }
     
-    res = _amg8833_iic_read(handle, AMG8833_REG_INTC, (uint8_t *)&prev, 1);        /* read intc register */
-    if (res)                                                                       /* check result */
+    res = a_amg8833_iic_read(handle, AMG8833_REG_INTC, (uint8_t *)&prev, 1);       /* read intc register */
+    if (res != 0)                                                                  /* check result */
     {
         handle->debug_print("amg8833: read intc register failed.\n");              /* read intc register failed */
        
@@ -580,8 +597,8 @@ uint8_t amg8833_set_interrupt_mode(amg8833_handle_t *handle, amg8833_interrupt_m
     }
     prev &= ~(1 << 1);                                                             /* clear the config */
     prev |= mode << 1;                                                             /* set the config */
-    res = _amg8833_iic_write(handle, AMG8833_REG_INTC, (uint8_t *)&prev, 1);       /* write intc register */
-    if (res)                                                                       /* check result */
+    res = a_amg8833_iic_write(handle, AMG8833_REG_INTC, (uint8_t *)&prev, 1);      /* write intc register */
+    if (res != 0)                                                                  /* check result */
     {
         handle->debug_print("amg8833: write intc register failed.\n");             /* write intc register failed */
        
@@ -604,8 +621,8 @@ uint8_t amg8833_set_interrupt_mode(amg8833_handle_t *handle, amg8833_interrupt_m
  */
 uint8_t amg8833_get_interrupt_mode(amg8833_handle_t *handle, amg8833_interrupt_mode_t *mode)
 {
-    volatile uint8_t res;
-    volatile uint8_t prev;
+    uint8_t res;
+    uint8_t prev;
     
     if (handle == NULL)                                                            /* check handle */
     {
@@ -616,8 +633,8 @@ uint8_t amg8833_get_interrupt_mode(amg8833_handle_t *handle, amg8833_interrupt_m
         return 3;                                                                  /* return error */
     }
     
-    res = _amg8833_iic_read(handle, AMG8833_REG_INTC, (uint8_t *)&prev, 1);        /* read intc register */
-    if (res)                                                                       /* check result */
+    res = a_amg8833_iic_read(handle, AMG8833_REG_INTC, (uint8_t *)&prev, 1);       /* read intc register */
+    if (res != 0)                                                                  /* check result */
     {
         handle->debug_print("amg8833: read intc register failed.\n");              /* read intc register failed */
        
@@ -641,8 +658,8 @@ uint8_t amg8833_get_interrupt_mode(amg8833_handle_t *handle, amg8833_interrupt_m
  */
 uint8_t amg8833_set_interrupt(amg8833_handle_t *handle, amg8833_bool_t enable)
 {
-    volatile uint8_t res;
-    volatile uint8_t prev;
+    uint8_t res;
+    uint8_t prev;
     
     if (handle == NULL)                                                            /* check handle */
     {
@@ -653,8 +670,8 @@ uint8_t amg8833_set_interrupt(amg8833_handle_t *handle, amg8833_bool_t enable)
         return 3;                                                                  /* return error */
     }
     
-    res = _amg8833_iic_read(handle, AMG8833_REG_INTC, (uint8_t *)&prev, 1);        /* read intc register */
-    if (res)                                                                       /* check result */
+    res = a_amg8833_iic_read(handle, AMG8833_REG_INTC, (uint8_t *)&prev, 1);       /* read intc register */
+    if (res != 0)                                                                  /* check result */
     {
         handle->debug_print("amg8833: read intc register failed.\n");              /* read intc register failed */
        
@@ -662,8 +679,8 @@ uint8_t amg8833_set_interrupt(amg8833_handle_t *handle, amg8833_bool_t enable)
     }
     prev &= ~(1 << 0);                                                             /* clear the config */
     prev |= enable << 0;                                                           /* set the config */
-    res = _amg8833_iic_write(handle, AMG8833_REG_INTC, (uint8_t *)&prev, 1);       /* write intc register */
-    if (res)                                                                       /* check result */
+    res = a_amg8833_iic_write(handle, AMG8833_REG_INTC, (uint8_t *)&prev, 1);      /* write intc register */
+    if (res != 0)                                                                  /* check result */
     {
         handle->debug_print("amg8833: write intc register failed.\n");             /* write intc register failed */
        
@@ -686,8 +703,8 @@ uint8_t amg8833_set_interrupt(amg8833_handle_t *handle, amg8833_bool_t enable)
  */
 uint8_t amg8833_get_interrupt(amg8833_handle_t *handle, amg8833_bool_t *enable)
 {
-    volatile uint8_t res;
-    volatile uint8_t prev;
+    uint8_t res;
+    uint8_t prev;
     
     if (handle == NULL)                                                            /* check handle */
     {
@@ -698,8 +715,8 @@ uint8_t amg8833_get_interrupt(amg8833_handle_t *handle, amg8833_bool_t *enable)
         return 3;                                                                  /* return error */
     }
     
-    res = _amg8833_iic_read(handle, AMG8833_REG_INTC, (uint8_t *)&prev, 1);        /* read intc register */
-    if (res)                                                                       /* check result */
+    res = a_amg8833_iic_read(handle, AMG8833_REG_INTC, (uint8_t *)&prev, 1);       /* read intc register */
+    if (res != 0)                                                                  /* check result */
     {
         handle->debug_print("amg8833: read intc register failed.\n");              /* read intc register failed */
        
@@ -723,8 +740,8 @@ uint8_t amg8833_get_interrupt(amg8833_handle_t *handle, amg8833_bool_t *enable)
  */
 uint8_t amg8833_get_status(amg8833_handle_t *handle, uint8_t *status)
 {
-    volatile uint8_t res;
-    volatile uint8_t prev;
+    uint8_t res;
+    uint8_t prev;
     
     if (handle == NULL)                                                            /* check handle */
     {
@@ -735,8 +752,8 @@ uint8_t amg8833_get_status(amg8833_handle_t *handle, uint8_t *status)
         return 3;                                                                  /* return error */
     }
     
-    res = _amg8833_iic_read(handle, AMG8833_REG_STAT, (uint8_t *)&prev, 1);        /* read stat register */
-    if (res)                                                                       /* check result */
+    res = a_amg8833_iic_read(handle, AMG8833_REG_STAT, (uint8_t *)&prev, 1);       /* read stat register */
+    if (res != 0)                                                                  /* check result */
     {
         handle->debug_print("amg8833: read stat register failed.\n");              /* read stat register failed */
        
@@ -760,8 +777,8 @@ uint8_t amg8833_get_status(amg8833_handle_t *handle, uint8_t *status)
  */
 uint8_t amg8833_clear_status(amg8833_handle_t *handle, amg8833_status_t status)
 {
-    volatile uint8_t res;
-    volatile uint8_t prev;
+    uint8_t res;
+    uint8_t prev;
     
     if (handle == NULL)                                                             /* check handle */
     {
@@ -773,8 +790,8 @@ uint8_t amg8833_clear_status(amg8833_handle_t *handle, amg8833_status_t status)
     }
     
     prev = 1 << status;                                                             /* set the command */
-    res = _amg8833_iic_write(handle, AMG8833_REG_SCLR, (uint8_t *)&prev, 1);        /* write sclr register */
-    if (res)                                                                        /* check result */
+    res = a_amg8833_iic_write(handle, AMG8833_REG_SCLR, (uint8_t *)&prev, 1);       /* write sclr register */
+    if (res != 0)                                                                   /* check result */
     {
         handle->debug_print("amg8833: write sclr register failed.\n");              /* write sclr register failed */
        
@@ -797,8 +814,8 @@ uint8_t amg8833_clear_status(amg8833_handle_t *handle, amg8833_status_t status)
  */
 uint8_t amg8833_set_average_mode(amg8833_handle_t *handle, amg8833_average_mode_t mode)
 {
-    volatile uint8_t res;
-    volatile uint8_t prev;
+    uint8_t res;
+    uint8_t prev;
     
     if (handle == NULL)                                                            /* check handle */
     {
@@ -809,8 +826,8 @@ uint8_t amg8833_set_average_mode(amg8833_handle_t *handle, amg8833_average_mode_
         return 3;                                                                  /* return error */
     }
     
-    res = _amg8833_iic_read(handle, AMG8833_REG_AVE, (uint8_t *)&prev, 1);         /* read ave register */
-    if (res)                                                                       /* check result */
+    res = a_amg8833_iic_read(handle, AMG8833_REG_AVE, (uint8_t *)&prev, 1);        /* read ave register */
+    if (res != 0)                                                                  /* check result */
     {
         handle->debug_print("amg8833: read ave register failed.\n");               /* read ave register failed */
        
@@ -818,8 +835,8 @@ uint8_t amg8833_set_average_mode(amg8833_handle_t *handle, amg8833_average_mode_
     }
     prev &= ~(1 << 5);                                                             /* clear the config */
     prev |= mode << 5;                                                             /* set the config */
-    res = _amg8833_iic_write(handle, AMG8833_REG_AVE, (uint8_t *)&prev, 1);        /* write ave register */
-    if (res)                                                                       /* check result */
+    res = a_amg8833_iic_write(handle, AMG8833_REG_AVE, (uint8_t *)&prev, 1);       /* write ave register */
+    if (res != 0)                                                                  /* check result */
     {
         handle->debug_print("amg8833: write ave register failed.\n");              /* write ave register failed */
        
@@ -842,8 +859,8 @@ uint8_t amg8833_set_average_mode(amg8833_handle_t *handle, amg8833_average_mode_
  */
 uint8_t amg8833_get_average_mode(amg8833_handle_t *handle, amg8833_average_mode_t *mode)
 {
-    volatile uint8_t res;
-    volatile uint8_t prev;
+    uint8_t res;
+    uint8_t prev;
     
     if (handle == NULL)                                                            /* check handle */
     {
@@ -854,8 +871,8 @@ uint8_t amg8833_get_average_mode(amg8833_handle_t *handle, amg8833_average_mode_
         return 3;                                                                  /* return error */
     }
     
-    res = _amg8833_iic_read(handle, AMG8833_REG_AVE, (uint8_t *)&prev, 1);         /* read ave register */
-    if (res)                                                                       /* check result */
+    res = a_amg8833_iic_read(handle, AMG8833_REG_AVE, (uint8_t *)&prev, 1);        /* read ave register */
+    if (res != 0)                                                                  /* check result */
     {
         handle->debug_print("amg8833: read ave register failed.\n");               /* read ave register failed */
        
@@ -879,8 +896,8 @@ uint8_t amg8833_get_average_mode(amg8833_handle_t *handle, amg8833_average_mode_
  */
 uint8_t amg8833_set_interrupt_high_level(amg8833_handle_t *handle, int16_t level)
 {
-    volatile uint8_t res;
-    volatile uint8_t buf[2];
+    uint8_t res;
+    uint8_t buf[2];
     
     if (handle == NULL)                                                                /* check handle */
     {
@@ -893,15 +910,15 @@ uint8_t amg8833_set_interrupt_high_level(amg8833_handle_t *handle, int16_t level
     
     buf[0] = (level >> 0) & 0xFF;                                                      /* get lower */
     buf[1] = (level >> 8) & 0xF;                                                       /* get upper */
-    res = _amg8833_iic_write(handle, AMG8833_REG_INTHL, (uint8_t *)&buf[0], 1);        /* write inthl register */
-    if (res)                                                                           /* check result */
+    res = a_amg8833_iic_write(handle, AMG8833_REG_INTHL, (uint8_t *)&buf[0], 1);       /* write inthl register */
+    if (res != 0)                                                                      /* check result */
     {
         handle->debug_print("amg8833: write inthl register failed.\n");                /* write inthl register failed */
        
         return 1;                                                                      /* return error */
     }
-    res = _amg8833_iic_write(handle, AMG8833_REG_INTHH, (uint8_t *)&buf[1], 1);        /* write inthh register */
-    if (res)                                                                           /* check result */
+    res = a_amg8833_iic_write(handle, AMG8833_REG_INTHH, (uint8_t *)&buf[1], 1);       /* write inthh register */
+    if (res != 0)                                                                      /* check result */
     {
         handle->debug_print("amg8833: write inthh register failed.\n");                /* write inthh register failed */
        
@@ -924,8 +941,8 @@ uint8_t amg8833_set_interrupt_high_level(amg8833_handle_t *handle, int16_t level
  */
 uint8_t amg8833_get_interrupt_high_level(amg8833_handle_t *handle, int16_t *level)
 {
-    volatile uint8_t res;
-    volatile uint8_t buf[2];
+    uint8_t res;
+    uint8_t buf[2];
     
     if (handle == NULL)                                                               /* check handle */
     {
@@ -936,21 +953,21 @@ uint8_t amg8833_get_interrupt_high_level(amg8833_handle_t *handle, int16_t *leve
         return 3;                                                                     /* return error */
     }
     
-    res = _amg8833_iic_read(handle, AMG8833_REG_INTHL, (uint8_t *)&buf[0], 1);        /* read inthl register */
-    if (res)                                                                          /* check result */
+    res = a_amg8833_iic_read(handle, AMG8833_REG_INTHL, (uint8_t *)&buf[0], 1);       /* read inthl register */
+    if (res != 0)                                                                     /* check result */
     {
         handle->debug_print("amg8833: read inthl register failed.\n");                /* read inthl register failed */
        
         return 1;                                                                     /* return error */
     }
-    res = _amg8833_iic_read(handle, AMG8833_REG_INTHH, (uint8_t *)&buf[1], 1);        /* read inthh register */
-    if (res)                                                                          /* check result */
+    res = a_amg8833_iic_read(handle, AMG8833_REG_INTHH, (uint8_t *)&buf[1], 1);       /* read inthh register */
+    if (res != 0)                                                                     /* check result */
     {
         handle->debug_print("amg8833: read inthh register failed.\n");                /* read inthh register failed */
        
         return 1;                                                                     /* return error */
     }
-    if (buf[1] & (1 << 3))                                                            /* check negtive */
+    if ((buf[1] & (1 << 3)) != 0)                                                     /* check negtive */
     {
         *level = (int16_t)(((uint16_t)(buf[1]) << 8) | 
                  ((uint16_t)(0xF) << 12) | (buf[0] << 0));                            /* get the level */
@@ -976,8 +993,8 @@ uint8_t amg8833_get_interrupt_high_level(amg8833_handle_t *handle, int16_t *leve
  */
 uint8_t amg8833_set_interrupt_low_level(amg8833_handle_t *handle, int16_t level)
 {
-    volatile uint8_t res;
-    volatile uint8_t buf[2];
+    uint8_t res;
+    uint8_t buf[2];
     
     if (handle == NULL)                                                                /* check handle */
     {
@@ -990,15 +1007,15 @@ uint8_t amg8833_set_interrupt_low_level(amg8833_handle_t *handle, int16_t level)
     
     buf[0] = (level >> 0) & 0xFF;                                                      /* get lower */
     buf[1] = (level >> 8) & 0xF;                                                       /* get upper */
-    res = _amg8833_iic_write(handle, AMG8833_REG_INTLL, (uint8_t *)&buf[0], 1);        /* write intll register */
-    if (res)                                                                           /* check result */
+    res = a_amg8833_iic_write(handle, AMG8833_REG_INTLL, (uint8_t *)&buf[0], 1);       /* write intll register */
+    if (res != 0)                                                                      /* check result */
     {
         handle->debug_print("amg8833: write intll register failed.\n");                /* write intll register failed */
        
         return 1;                                                                      /* return error */
     }
-    res = _amg8833_iic_write(handle, AMG8833_REG_INTLH, (uint8_t *)&buf[1], 1);        /* write intlh register */
-    if (res)                                                                           /* check result */
+    res = a_amg8833_iic_write(handle, AMG8833_REG_INTLH, (uint8_t *)&buf[1], 1);       /* write intlh register */
+    if (res != 0)                                                                      /* check result */
     {
         handle->debug_print("amg8833: write intlh register failed.\n");                /* write intlh register failed */
        
@@ -1021,8 +1038,8 @@ uint8_t amg8833_set_interrupt_low_level(amg8833_handle_t *handle, int16_t level)
  */
 uint8_t amg8833_get_interrupt_low_level(amg8833_handle_t *handle, int16_t *level)
 {
-    volatile uint8_t res;
-    volatile uint8_t buf[2];
+    uint8_t res;
+    uint8_t buf[2];
     
     if (handle == NULL)                                                               /* check handle */
     {
@@ -1033,21 +1050,21 @@ uint8_t amg8833_get_interrupt_low_level(amg8833_handle_t *handle, int16_t *level
         return 3;                                                                     /* return error */
     }
     
-    res = _amg8833_iic_read(handle, AMG8833_REG_INTLL, (uint8_t *)&buf[0], 1);        /* read intll register */
-    if (res)                                                                          /* check result */
+    res = a_amg8833_iic_read(handle, AMG8833_REG_INTLL, (uint8_t *)&buf[0], 1);       /* read intll register */
+    if (res != 0)                                                                     /* check result */
     {
         handle->debug_print("amg8833: read intll register failed.\n");                /* read intll register failed */
        
         return 1;                                                                     /* return error */
     }
-    res = _amg8833_iic_read(handle, AMG8833_REG_INTLH, (uint8_t *)&buf[1], 1);        /* read intlh register */
-    if (res)                                                                          /* check result */
+    res = a_amg8833_iic_read(handle, AMG8833_REG_INTLH, (uint8_t *)&buf[1], 1);       /* read intlh register */
+    if (res != 0)                                                                     /* check result */
     {
         handle->debug_print("amg8833: read intlh register failed.\n");                /* read intlh register failed */
        
         return 1;                                                                     /* return error */
     }
-    if (buf[1] & (1 << 3))                                                            /* check negtive */
+    if ((buf[1] & (1 << 3)) != 0)                                                     /* check negtive */
     {
         *level = (int16_t)(((uint16_t)(buf[1]) << 8) | 
                  ((uint16_t)(0xF) << 12) | (buf[0] << 0));                            /* get the level */
@@ -1073,8 +1090,8 @@ uint8_t amg8833_get_interrupt_low_level(amg8833_handle_t *handle, int16_t *level
  */
 uint8_t amg8833_set_interrupt_hysteresis_level(amg8833_handle_t *handle, int16_t level)
 {
-    volatile uint8_t res;
-    volatile uint8_t buf[2];
+    uint8_t res;
+    uint8_t buf[2];
     
     if (handle == NULL)                                                                /* check handle */
     {
@@ -1087,15 +1104,15 @@ uint8_t amg8833_set_interrupt_hysteresis_level(amg8833_handle_t *handle, int16_t
     
     buf[0] = (level >> 0) & 0xFF;                                                      /* get lower */
     buf[1] = (level >> 8) & 0xF;                                                       /* get upper */
-    res = _amg8833_iic_write(handle, AMG8833_REG_IHYSL, (uint8_t *)&buf[0], 1);        /* write ihysl register */
-    if (res)                                                                           /* check result */
+    res = a_amg8833_iic_write(handle, AMG8833_REG_IHYSL, (uint8_t *)&buf[0], 1);       /* write ihysl register */
+    if (res != 0)                                                                      /* check result */
     {
         handle->debug_print("amg8833: write ihysl register failed.\n");                /* write ihysl register failed */
        
         return 1;                                                                      /* return error */
     }
-    res = _amg8833_iic_write(handle, AMG8833_REG_IHYSH, (uint8_t *)&buf[1], 1);        /* write ihysh register */
-    if (res)                                                                           /* check result */
+    res = a_amg8833_iic_write(handle, AMG8833_REG_IHYSH, (uint8_t *)&buf[1], 1);       /* write ihysh register */
+    if (res != 0)                                                                      /* check result */
     {
         handle->debug_print("amg8833: write ihysh register failed.\n");                /* write ihysh register failed */
        
@@ -1118,8 +1135,8 @@ uint8_t amg8833_set_interrupt_hysteresis_level(amg8833_handle_t *handle, int16_t
  */
 uint8_t amg8833_get_interrupt_hysteresis_level(amg8833_handle_t *handle, int16_t *level)
 {
-    volatile uint8_t res;
-    volatile uint8_t buf[2];
+    uint8_t res;
+    uint8_t buf[2];
     
     if (handle == NULL)                                                               /* check handle */
     {
@@ -1130,21 +1147,21 @@ uint8_t amg8833_get_interrupt_hysteresis_level(amg8833_handle_t *handle, int16_t
         return 3;                                                                     /* return error */
     }
     
-    res = _amg8833_iic_read(handle, AMG8833_REG_IHYSL, (uint8_t *)&buf[0], 1);        /* read ihysl register */
-    if (res)                                                                          /* check result */
+    res = a_amg8833_iic_read(handle, AMG8833_REG_IHYSL, (uint8_t *)&buf[0], 1);       /* read ihysl register */
+    if (res != 0)                                                                     /* check result */
     {
         handle->debug_print("amg8833: read ihysl register failed.\n");                /* read ihysl register failed */
        
         return 1;                                                                     /* return error */
     }
-    res = _amg8833_iic_read(handle, AMG8833_REG_IHYSH, (uint8_t *)&buf[1], 1);        /* read ihysh register */
-    if (res)                                                                          /* check result */
+    res = a_amg8833_iic_read(handle, AMG8833_REG_IHYSH, (uint8_t *)&buf[1], 1);       /* read ihysh register */
+    if (res != 0)                                                                     /* check result */
     {
         handle->debug_print("amg8833: read ihysh register failed.\n");                /* read ihysh register failed */
        
         return 1;                                                                     /* return error */
     }
-    if (buf[1] & (1 << 3))                                                            /* check negtive */
+    if ((buf[1] & (1 << 3)) != 0)                                                     /* check negtive */
     {
         *level = (int16_t)(((uint16_t)(buf[1]) << 8) | 
                  ((uint16_t)(0xF) << 12) | (buf[0] << 0));                            /* get the level */
@@ -1225,9 +1242,9 @@ uint8_t amg8833_interrupt_level_convert_to_data(amg8833_handle_t *handle, int16_
  */
 uint8_t amg8833_read_temperature(amg8833_handle_t *handle, int16_t *raw, float *temp)
 {
-    volatile uint8_t res;
-    volatile uint8_t buf[2];
-    volatile int16_t data;
+    uint8_t res;
+    uint8_t buf[2];
+    int16_t data;
     
     if (handle == NULL)                                                              /* check handle */
     {
@@ -1238,15 +1255,15 @@ uint8_t amg8833_read_temperature(amg8833_handle_t *handle, int16_t *raw, float *
         return 3;                                                                    /* return error */
     }
     
-    res = _amg8833_iic_read(handle, AMG8833_REG_TTHL, (uint8_t *)&buf[0], 1);        /* read tthl register */
-    if (res)                                                                         /* check result */
+    res = a_amg8833_iic_read(handle, AMG8833_REG_TTHL, (uint8_t *)&buf[0], 1);       /* read tthl register */
+    if (res != 0)                                                                    /* check result */
     {
         handle->debug_print("amg8833: read tthl register failed.\n");                /* read tthl register failed */
        
         return 1;                                                                    /* return error */
     }
-    res = _amg8833_iic_read(handle, AMG8833_REG_TTHH, (uint8_t *)&buf[1], 1);        /* read tthh register */
-    if (res)                                                                         /* check result */
+    res = a_amg8833_iic_read(handle, AMG8833_REG_TTHH, (uint8_t *)&buf[1], 1);       /* read tthh register */
+    if (res != 0)                                                                    /* check result */
     {
         handle->debug_print("amg8833: read tthh register failed.\n");                /* read tthh register failed */
        
@@ -1254,7 +1271,7 @@ uint8_t amg8833_read_temperature(amg8833_handle_t *handle, int16_t *raw, float *
     }
     *raw = (int16_t)(((uint16_t)(buf[1] & 0xF) << 8) | (buf[0] << 0));               /* get the raw */
     data = (int16_t)(((uint16_t)(buf[1] & 0x7) << 8) | (buf[0] << 0));               /* get the raw */
-    if (buf[1] & 0x8)                                                                /* if negtive */
+    if ((buf[1] & 0x8) != 0)                                                         /* if negtive */
     {
         data = data * (-1);                                                          /* x (-1) */
     }
@@ -1283,10 +1300,10 @@ uint8_t amg8833_read_temperature(amg8833_handle_t *handle, int16_t *raw, float *
  */
 uint8_t amg8833_read_temperature_array(amg8833_handle_t *handle, int16_t raw[8][8], float temp[8][8])
 {
-    volatile uint8_t res;
-    volatile uint8_t i;
-    volatile uint8_t j;
-    volatile uint8_t buf[128];
+    uint8_t res;
+    uint8_t i;
+    uint8_t j;
+    uint8_t buf[128];
     
     if (handle == NULL)                                                                     /* check handle */
     {
@@ -1297,8 +1314,8 @@ uint8_t amg8833_read_temperature_array(amg8833_handle_t *handle, int16_t raw[8][
         return 3;                                                                           /* return error */
     }
     
-    res = _amg8833_iic_read(handle, AMG8833_REG_T01L, (uint8_t *)buf, 128);                 /* read t01l register */
-    if (res)                                                                                /* check result */
+    res = a_amg8833_iic_read(handle, AMG8833_REG_T01L, (uint8_t *)buf, 128);                /* read t01l register */
+    if (res != 0)                                                                           /* check result */
     {
         handle->debug_print("amg8833: read t01l register failed.\n");                       /* read t01l register failed */
        
@@ -1336,8 +1353,7 @@ uint8_t amg8833_read_temperature_array(amg8833_handle_t *handle, int16_t raw[8][
  */
 uint8_t amg8833_get_interrupt_table(amg8833_handle_t *handle, uint8_t table[8][1])
 {
-    volatile uint8_t res;
-    volatile uint8_t buf[2];
+    uint8_t res;
     
     if (handle == NULL)                                                               /* check handle */
     {
@@ -1348,57 +1364,57 @@ uint8_t amg8833_get_interrupt_table(amg8833_handle_t *handle, uint8_t table[8][1
         return 3;                                                                     /* return error */
     }
     
-    res = _amg8833_iic_read(handle, AMG8833_REG_INT0, (uint8_t *)table[7], 1);        /* read int0 register */
-    if (res)                                                                          /* check result */
+    res = a_amg8833_iic_read(handle, AMG8833_REG_INT0, (uint8_t *)table[7], 1);       /* read int0 register */
+    if (res != 0)                                                                     /* check result */
     {
         handle->debug_print("amg8833: read int0 register failed.\n");                 /* read int0 register failed */
        
         return 1;                                                                     /* return error */
     }
-    res = _amg8833_iic_read(handle, AMG8833_REG_INT1, (uint8_t *)table[6], 1);        /* read int1 register */
-    if (res)                                                                          /* check result */
+    res = a_amg8833_iic_read(handle, AMG8833_REG_INT1, (uint8_t *)table[6], 1);       /* read int1 register */
+    if (res != 0)                                                                     /* check result */
     {
         handle->debug_print("amg8833: read int1 register failed.\n");                 /* read int1 register failed */
        
         return 1;                                                                     /* return error */
     }
-    res = _amg8833_iic_read(handle, AMG8833_REG_INT2, (uint8_t *)table[5], 1);        /* read int2 register */
-    if (res)                                                                          /* check result */
+    res = a_amg8833_iic_read(handle, AMG8833_REG_INT2, (uint8_t *)table[5], 1);       /* read int2 register */
+    if (res != 0)                                                                     /* check result */
     {
         handle->debug_print("amg8833: read int2 register failed.\n");                 /* read int2 register failed */
        
         return 1;                                                                     /* return error */
     }
-    res = _amg8833_iic_read(handle, AMG8833_REG_INT3, (uint8_t *)table[4], 1);        /* read int3 register */
-    if (res)                                                                          /* check result */
+    res = a_amg8833_iic_read(handle, AMG8833_REG_INT3, (uint8_t *)table[4], 1);       /* read int3 register */
+    if (res != 0)                                                                     /* check result */
     {
         handle->debug_print("amg8833: read int3 register failed.\n");                 /* read int3 register failed */
        
         return 1;                                                                     /* return error */
     }
-    res = _amg8833_iic_read(handle, AMG8833_REG_INT4, (uint8_t *)table[3], 1);        /* read int4 register */
-    if (res)                                                                          /* check result */
+    res = a_amg8833_iic_read(handle, AMG8833_REG_INT4, (uint8_t *)table[3], 1);       /* read int4 register */
+    if (res != 0)                                                                     /* check result */
     {
         handle->debug_print("amg8833: read int4 register failed.\n");                 /* read int4 register failed */
        
         return 1;                                                                     /* return error */
     }
-    res = _amg8833_iic_read(handle, AMG8833_REG_INT5, (uint8_t *)table[2], 1);        /* read int5 register */
-    if (res)                                                                          /* check result */
+    res = a_amg8833_iic_read(handle, AMG8833_REG_INT5, (uint8_t *)table[2], 1);       /* read int5 register */
+    if (res != 0)                                                                     /* check result */
     {
         handle->debug_print("amg8833: read int5 register failed.\n");                 /* read int5 register failed */
        
         return 1;                                                                     /* return error */
     }
-    res = _amg8833_iic_read(handle, AMG8833_REG_INT6, (uint8_t *)table[1], 1);        /* read int6 register */
-    if (res)                                                                          /* check result */
+    res = a_amg8833_iic_read(handle, AMG8833_REG_INT6, (uint8_t *)table[1], 1);       /* read int6 register */
+    if (res != 0)                                                                     /* check result */
     {
         handle->debug_print("amg8833: read int6 register failed.\n");                 /* read int6 register failed */
        
         return 1;                                                                     /* return error */
     }
-    res = _amg8833_iic_read(handle, AMG8833_REG_INT7, (uint8_t *)table[0], 1);        /* read int7 register */
-    if (res)                                                                          /* check result */
+    res = a_amg8833_iic_read(handle, AMG8833_REG_INT7, (uint8_t *)table[0], 1);       /* read int7 register */
+    if (res != 0)                                                                     /* check result */
     {
         handle->debug_print("amg8833: read int7 register failed.\n");                 /* read int7 register failed */
        
@@ -1432,7 +1448,7 @@ uint8_t amg8833_set_reg(amg8833_handle_t *handle, uint8_t reg, uint8_t *buf, uin
         return 3;                                            /* return error */
     }
     
-    return _amg8833_iic_write(handle, reg, buf, len);        /* write data */
+    return a_amg8833_iic_write(handle, reg, buf, len);       /* write data */
 }
 
 /**
@@ -1459,7 +1475,7 @@ uint8_t amg8833_get_reg(amg8833_handle_t *handle, uint8_t reg, uint8_t *buf, uin
         return 3;                                           /* return error */
     }
     
-    return _amg8833_iic_read(handle, reg, buf, len);        /* read data */
+    return a_amg8833_iic_read(handle, reg, buf, len);       /* read data */
 }
 
 /**

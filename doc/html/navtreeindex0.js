@@ -235,6 +235,9 @@ var NAVTREEINDEX0 =
 "group__amg8833__example__driver.html#ga2209d067136e8de3e68cd4c94dc15903":[3,0,1,2,2],
 "group__amg8833__example__driver.html#ga2209d067136e8de3e68cd4c94dc15903":[3,0,1,3,4],
 "group__amg8833__example__driver.html#ga2209d067136e8de3e68cd4c94dc15903":[1,0,4,10],
+"group__amg8833__example__driver.html#ga28774001b94e08141ebccd4b7ce34652":[1,0,4,13],
+"group__amg8833__example__driver.html#ga28774001b94e08141ebccd4b7ce34652":[3,0,1,3,7],
+"group__amg8833__example__driver.html#ga28774001b94e08141ebccd4b7ce34652":[3,0,1,2,5],
 "group__amg8833__example__driver.html#ga2b90394ed88394f994828c1a26c5675c":[1,0,4,11],
 "group__amg8833__example__driver.html#ga2b90394ed88394f994828c1a26c5675c":[3,0,1,3,5],
 "group__amg8833__example__driver.html#ga2b90394ed88394f994828c1a26c5675c":[3,0,1,2,3],
@@ -246,8 +249,5 @@ var NAVTREEINDEX0 =
 "group__amg8833__example__driver.html#ga8620cf3561b9a608d124bbfe9e67b160":[3,0,1,2,0],
 "group__amg8833__example__driver.html#ga8620cf3561b9a608d124bbfe9e67b160":[1,0,4,8],
 "group__amg8833__example__driver.html#ga8620cf3561b9a608d124bbfe9e67b160":[3,0,1,3,2],
-"group__amg8833__example__driver.html#ga8b8a843d8e12f11db24ce8160a9d75c4":[1,0,4,6],
-"group__amg8833__example__driver.html#ga8b8a843d8e12f11db24ce8160a9d75c4":[3,0,1,1,4],
-"group__amg8833__example__driver.html#ga8b8a843d8e12f11db24ce8160a9d75c4":[3,0,1,0,2],
-"group__amg8833__example__driver.html#ga912686c4a49a929e45c8f032530352df":[3,0,1,0,3]
+"group__amg8833__example__driver.html#ga8b8a843d8e12f11db24ce8160a9d75c4":[1,0,4,6]
 };

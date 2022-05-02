@@ -47,12 +47,9 @@ uint8_t (*g_gpio_irq)(void) = NULL;        /**< gpio irq */
 /**
  * @brief     interface receive callback
  * @param[in] type is the interrupt type
- * @return    status code
- *            - 0 success
- *            - 1 run failed
  * @note      none
  */
-static uint8_t _callback(uint8_t type)
+static void a_callback(uint8_t type)
 {
     switch (type)
     {
@@ -70,18 +67,18 @@ static uint8_t _callback(uint8_t type)
         }
         case AMG8833_STATUS_INTF :
         {
-            volatile uint8_t res;
-            volatile uint8_t i, j;
-            volatile uint8_t level;
-            volatile uint8_t table[8][1];
+            uint8_t res;
+            uint8_t i, j;
+            uint8_t level;
+            uint8_t table[8][1];
             
             amg8833_interface_debug_print("amg8833: irq interrupt outbreak.\n");
             
             /* get table */
             res = amg8833_interrupt_get_table((uint8_t (*)[1])table);
-            if (res)
+            if (res != 0)
             {
-                return 1;
+                amg8833_interface_debug_print("amg8833: get table failed.\n");
             }
             else
             {
@@ -90,7 +87,7 @@ static uint8_t _callback(uint8_t type)
                     level = table[i][0];
                     for (j = 0; j < 8; j++)
                     {
-                        if ((level >> (7 - j)) & 0x01)
+                        if (((level >> (7 - j)) & 0x01) != 0)
                         {
                             amg8833_interface_debug_print("%d  ", 1);
                         }
@@ -107,11 +104,11 @@ static uint8_t _callback(uint8_t type)
         }
         default :
         {
+            amg8833_interface_debug_print("amg8833: unknown code.\n");
+            
             break;
         }
     }
-    
-    return 0;
 }
 
 /**
@@ -208,7 +205,7 @@ uint8_t amg8833(uint8_t argc, char **argv)
                 }
                 
                 /* run reg test */
-                if (amg8833_register_test(addr))
+                if (amg8833_register_test(addr) != 0)
                 {
                     return 1;
                 }
@@ -255,7 +252,7 @@ uint8_t amg8833(uint8_t argc, char **argv)
                 }
                 
                 /* run read test */
-                if (amg8833_read_test(addr, atoi(argv[4])))
+                if (amg8833_read_test(addr, atoi(argv[4])) != 0)
                 {
                     return 1;
                 }
@@ -276,8 +273,8 @@ uint8_t amg8833(uint8_t argc, char **argv)
             if (strcmp("read", argv[2]) == 0)
             {
                 amg8833_address_t addr;
-                volatile uint32_t i, j, k, times;
-                volatile uint8_t res;
+                uint32_t i, j, k, times;
+                uint8_t res;
                 
                 if (strcmp("0", argv[3]) == 0)
                 {
@@ -297,7 +294,7 @@ uint8_t amg8833(uint8_t argc, char **argv)
                 
                 /* init */
                 res = amg8833_basic_init(addr);
-                if (res)
+                if (res != 0)
                 {
                     return 1;
                 }
@@ -312,10 +309,10 @@ uint8_t amg8833(uint8_t argc, char **argv)
                     
                     /* read temperature array */
                     res = amg8833_basic_read_temperature_array(temp);
-                    if (res)
+                    if (res != 0)
                     {
                         amg8833_interface_debug_print("amg8833: read temperature array failed.\n");
-                        amg8833_basic_deinit();
+                        (void)amg8833_basic_deinit();
                         
                         return 1;
                     }
@@ -333,9 +330,9 @@ uint8_t amg8833(uint8_t argc, char **argv)
                     
                     /* read temperature */
                     res = amg8833_basic_read_temperature((float *)&tmp);
-                    if (res)
+                    if (res != 0)
                     {
-                        amg8833_basic_deinit();
+                        (void)amg8833_basic_deinit();
                        
                         return 1;
                     }
@@ -403,25 +400,25 @@ uint8_t amg8833(uint8_t argc, char **argv)
                 
                 /* run interrupt test */
                 g_gpio_irq = amg8833_interrupt_test_irq_handler;
-                if (gpio_interrupt_init())
+                if (gpio_interrupt_init() != 0)
                 {
                     g_gpio_irq = NULL;
                 }
                 if (amg8833_interrupt_test(addr, mode,
-                                           atof(argv[6]),
-                                           atof(argv[7]),
-                                           atof(argv[8]),
-                                           atoi(argv[4])))
+                                          (float)atof(argv[6]),
+                                          (float)atof(argv[7]),
+                                          (float)atof(argv[8]),
+                                           atoi(argv[4])) != 0)
                 {
                     g_gpio_irq = NULL;
-                    gpio_interrupt_deinit();
+                    (void)gpio_interrupt_deinit();
                     
                     return 1;
                 }
                 else
                 {
                     g_gpio_irq = NULL;
-                    gpio_interrupt_deinit();
+                    (void)gpio_interrupt_deinit();
                     
                     return 0;
                 }
@@ -438,8 +435,8 @@ uint8_t amg8833(uint8_t argc, char **argv)
              /* read function */
             if (strcmp("int", argv[2]) == 0)
             {
-                volatile uint32_t i, times;
-                volatile uint8_t res;
+                uint32_t i, times;
+                uint8_t res;
                 amg8833_address_t addr;
                 amg8833_interrupt_mode_t mode;
                 
@@ -473,20 +470,20 @@ uint8_t amg8833(uint8_t argc, char **argv)
                 
                 /* run interrupt test */
                 g_gpio_irq = amg8833_interrupt_irq_handler;
-                if (gpio_interrupt_init())
+                if (gpio_interrupt_init() != 0)
                 {
                     g_gpio_irq = NULL;
                 }
                 times = atoi(argv[4]);
                 if (interrupt_interrupt_init(addr, 
                                              mode,
-                                             atof(argv[6]),
-                                             atof(argv[7]),
-                                             atof(argv[8]),
-                                             _callback))
+                                            (float)atof(argv[6]),
+                                            (float)atof(argv[7]),
+                                            (float)atof(argv[8]),
+                                             a_callback) != 0)
                 {
                     g_gpio_irq = NULL;
-                    gpio_interrupt_deinit();
+                    (void)gpio_interrupt_deinit();
                     
                     return 1;
                 }
@@ -495,14 +492,14 @@ uint8_t amg8833(uint8_t argc, char **argv)
                 amg8833_interface_delay_ms(1000);
                 for (i = 0; i < times; i++)
                 {
-                    volatile float temp;
+                    float temp;
                     
                     res = amg8833_interrupt_read_temperature((float *)&temp);
-                    if (res)
+                    if (res != 0)
                     {
-                        amg8833_interrupt_deinit();
+                        (void)amg8833_interrupt_deinit();
                         g_gpio_irq = NULL;
-                        gpio_interrupt_deinit();
+                        (void)gpio_interrupt_deinit();
                     }
                     else
                     {
@@ -514,9 +511,9 @@ uint8_t amg8833(uint8_t argc, char **argv)
                 }
                 
                 /* deinit */
-                amg8833_interrupt_deinit();
+                (void)amg8833_interrupt_deinit();
                 g_gpio_irq = NULL;
-                gpio_interrupt_deinit();
+                (void)gpio_interrupt_deinit();
                 
                 return 0;
             }

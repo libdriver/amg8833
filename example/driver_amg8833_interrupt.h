@@ -34,8 +34,8 @@
  * </table>
  */
 
-#ifndef _DRIVER_AMG8833_INTERRUPT_H_
-#define _DRIVER_AMG8833_INTERRUPT_H_
+#ifndef DRIVER_AMG8833_INTERRUPT_H
+#define DRIVER_AMG8833_INTERRUPT_H
 
 #include "driver_amg8833_interface.h"
 
@@ -81,7 +81,7 @@ uint8_t interrupt_interrupt_init(amg8833_address_t addr_pin,
                                  amg8833_interrupt_mode_t mode,
                                  float high_level, float low_level, 
                                  float hysteresis_level,
-                                 uint8_t (*callback)(uint8_t type) 
+                                 void (*callback)(uint8_t type) 
                                  );
 
 /**

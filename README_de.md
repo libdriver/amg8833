@@ -6,47 +6,47 @@
 
 ## LibDriver AMG8833
 
-[![MISRA](https://img.shields.io/badge/misra-compliant-brightgreen.svg)](/misra/README.md) [![API](https://img.shields.io/badge/api-reference-blue.svg)](https://www.libdriver.com/docs/amg8833/index.html) [![License](https://img.shields.io/badge/license-MIT-brightgreen.svg)](/LICENSE)
+[![MISRA](https://img.shields.io/badge/misra-compliant-brightgreen.svg)](/misra/README.md) [![API](https://img.shields.io/badge/api-reference-blue.svg)](https://www.libdriver.com/docs/amg8833/index.html) [![License](https://img.shields.io/badge/license-MIT-brightgreen.svg)](/LICENSE) 
 
-AMG8833红外阵列传感器是一种热电堆型红外传感器，可检测红外线量。以下条件通常会降低温度精度。请仔细检查实际使用条件下的性能和稳定性，并在必要时进行温度校正。 (1) 当传感器安装位置附近存在发热元件时。 (2) 当传感器暴露在热源附近。(3) 传感器本体温度急剧变化时。 (4) 传感器和检测对象之间存在难以透过远红外线的物质（例如玻璃、丙烯酸树脂或蒸汽）时。 (5) 当与传感器贴合的部分存在难以透过远红外线物质（例如，异物或水）。AMG8833可用于高性能家电、办公节能、数字标牌、自动门等。 
+Der AMG8833 Infrarot-Array-Sensor ist ein Thermosäulen-Infrarotsensor, der die Menge an Infrarotstrahlen erfasst. Die folgenden Bedingungen verschlechtern im Allgemeinen die Temperaturgenauigkeit. Überprüfen Sie sorgfältig die Leistung und Stabilität unter tatsächlichen Nutzungsbedingungen und führen Sie bei Bedarf Temperaturkorrekturen durch. (1) Wenn Heizelemente in der Nähe der Montageposition des Sensors vorhanden sind. (2) Wenn der Sensor ausgesetzt ist kalte oder heiße Luft. (3) Wenn sich die Temperatur des Sensorgehäuses schnell ändert. (4) Wenn Substanzen (z. B. Gläser, Acryl oder Dämpfe), die kaum Infrarotstrahlen durchlassen, zwischen dem Sensor und dem erkannten Objekt vorhanden sind. (5) Wenn Substanzen (z. B. Fremdstoffe oder Wasser), die kaum eine Strahlung durchlassen, vorhanden sind a Ferninfrarotstrahl, haften an der Linse des Sensors. AMG8833 kann in Haushaltsgeräten mit hoher Funktion, Energieeinsparung im Büro, digitaler Beschilderung, automatischen Türen usw. verwendet werden.
 
-LibDriver AMG8833是LibDriver推出的AMG8833全功能驱动，提供温度读取和温度阵列读取功能并且它符合MISRA标准。
+LibDriver AMG8833 ist ein voll funktionsfähiger Treiber von AMG8833, der von LibDriver gestartet wurde. Er bietet Temperaturmess- und Temperatur-Array-Lesefunktionen. LibDriver ist MISRA-konform.
 
-### 目录
+### Inhaltsverzeichnis
 
-  - [说明](#说明)
-  - [安装](#安装)
-  - [使用](#使用)
+  - [Anweisung](#Anweisung)
+  - [Installieren](#Installieren)
+  - [Nutzung](#Nutzung)
     - [example basic](#example-basic)
     - [example interrupt](#example-interrupt)
-  - [文档](#文档)
-  - [贡献](#贡献)
-  - [版权](#版权)
-  - [联系我们](#联系我们)
+  - [Dokument](#Dokument)
+  - [Beitrag](#Beitrag)
+  - [Lizenz](#Lizenz)
+  - [Kontaktieren Sie uns](#Kontaktieren-Sie-uns)
 
-### 说明
+### Anweisung
 
-/src目录包含了LibDriver AMG8833的源文件。
+/src enthält LibDriver AMG8833-Quelldateien.
 
-/interface目录包含了LibDriver AMG8833与平台无关的IIC总线模板。
+/interface enthält die plattformunabhängige Vorlage LibDriver AMG8833 IIC。
 
-/test目录包含了LibDriver AMG8833驱动测试程序，该程序可以简单的测试芯片必要功能。
+/test enthält den Testcode des LibDriver AMG8833-Treibers und dieser Code kann die erforderliche Funktion des Chips einfach testen。
 
-/example目录包含了LibDriver AMG8833编程范例。
+/example enthält LibDriver AMG8833-Beispielcode.
 
-/doc目录包含了LibDriver AMG8833离线文档。
+/doc enthält das LibDriver AMG8833-Offlinedokument.
 
-/datasheet目录包含了AMG8833数据手册。
+/Datenblatt enthält AMG8833-Datenblatt。
 
-/project目录包含了常用Linux与单片机开发板的工程样例。所有工程均采用shell脚本作为调试方法，详细内容可参考每个工程里面的README.md。
+/project enthält den allgemeinen Beispielcode für Linux- und MCU-Entwicklungsboards. Alle Projekte verwenden das Shell-Skript, um den Treiber zu debuggen, und die detaillierten Anweisungen finden Sie in der README.md jedes Projekts.
 
-### 安装
+### Installieren
 
-参考/interface目录下与平台无关的IIC总线模板，完成指定平台的IIC总线驱动。
+Verweisen Sie auf eine plattformunabhängige IIC-Schnittstellenvorlage und stellen Sie Ihren Plattform-IIC-Treiber fertig.
 
-将/src目录，/interface目录和/example目录加入工程。
+Fügen Sie /src, /interface und /example zu Ihrem Projekt hinzu.
 
-### 使用
+### Nutzung
 
 #### example basic
 
@@ -118,9 +118,10 @@ for (i = 0; i < times; i++)
 
 return 0;
 ```
+
 #### example interrupt
 
-```C
+```c
 uint32_t i, times;
 uint8_t res;
 uint8_t (*g_gpio_irq)(void) = NULL;
@@ -246,28 +247,60 @@ g_gpio_irq = NULL;
 return 0;
 ```
 
-### 文档
+### Dokument
 
-在线文档: https://www.libdriver.com/docs/amg8833/index.html
+Online-Dokumente: https://www.libdriver.com/docs/amg8833/index.html
 
-离线文档: /doc/html/index.html
+Offline-Dokumente: /doc/html/index.html
 
-### 贡献
+### Beitrag
 
-请联系lishifenging@outlook.com
+Bitte senden Sie eine E-Mail an lishifenging@outlook.com
 
-### 版权
+### Lizenz
 
-版权 (c) 2015 - 现在 LibDriver 版权所有
+Urheberrechte © (c) 2015 - Gegenwart LibDriver Alle Rechte vorbehalten
 
-MIT 许可证（MIT）
 
-特此免费授予任何获得本软件副本和相关文档文件（下称“软件”）的人不受限制地处置该软件的权利，包括不受限制地使用、复制、修改、合并、发布、分发、转授许可和/或出售该软件副本，以及再授权被配发了本软件的人如上的权利，须在下列条件下：
 
-上述版权声明和本许可声明应包含在该软件的所有副本或实质成分中。
+Die MIT-Lizenz (MIT)
 
-本软件是“如此”提供的，没有任何形式的明示或暗示的保证，包括但不限于对适销性、特定用途的适用性和不侵权的保证。在任何情况下，作者或版权持有人都不对任何索赔、损害或其他责任负责，无论这些追责来自合同、侵权或其它行为中，还是产生于、源于或有关于本软件以及本软件的使用或其它处置。
 
-### 联系我们
 
-请联系lishifenging@outlook.com
+Hiermit wird jeder Person kostenlos die Erlaubnis erteilt, eine Kopie zu erhalten
+
+dieser Software und zugehörigen Dokumentationsdateien (die „Software“) zu behandeln
+
+in der Software ohne Einschränkung, einschließlich, aber nicht beschränkt auf die Rechte
+
+zu verwenden, zu kopieren, zu modifizieren, zusammenzuführen, zu veröffentlichen, zu verteilen, unterzulizenzieren und/oder zu verkaufen
+
+Kopien der Software und Personen, denen die Software gehört, zu gestatten
+
+dazu eingerichtet werden, unter folgenden Bedingungen:
+
+
+
+Der obige Urheberrechtshinweis und dieser Genehmigungshinweis müssen in allen enthalten sein
+
+Kopien oder wesentliche Teile der Software.
+
+
+
+DIE SOFTWARE WIRD "WIE BESEHEN" BEREITGESTELLT, OHNE JEGLICHE GEWÄHRLEISTUNG, AUSDRÜCKLICH ODER
+
+STILLSCHWEIGEND, EINSCHLIESSLICH, ABER NICHT BESCHRÄNKT AUF DIE GEWÄHRLEISTUNG DER MARKTGÄNGIGKEIT,
+
+EIGNUNG FÜR EINEN BESTIMMTEN ZWECK UND NICHTVERLETZUNG VON RECHTEN DRITTER. IN KEINEM FALL DARF DAS
+
+AUTOREN ODER URHEBERRECHTSINHABER HAFTEN FÜR JEGLICHE ANSPRÜCHE, SCHÄDEN ODER ANDERE
+
+HAFTUNG, OB AUS VERTRAG, DELIKT ODER ANDERWEITIG, ENTSTEHEND AUS,
+
+AUS ODER IM ZUSAMMENHANG MIT DER SOFTWARE ODER DER VERWENDUNG ODER ANDEREN HANDLUNGEN MIT DER
+
+SOFTWARE.
+
+### Kontaktieren Sie uns
+
+Bitte senden Sie eine E-Mail an lishifenging@outlook.com
