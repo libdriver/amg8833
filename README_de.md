@@ -28,15 +28,15 @@ LibDriver AMG8833 ist ein voll funktionsfähiger Treiber von AMG8833, der von Li
 
 /src enthält LibDriver AMG8833-Quelldateien.
 
-/interface enthält die plattformunabhängige Vorlage LibDriver AMG8833 IIC。
+/interface enthält die plattformunabhängige Vorlage LibDriver AMG8833 IIC.
 
-/test enthält den Testcode des LibDriver AMG8833-Treibers und dieser Code kann die erforderliche Funktion des Chips einfach testen。
+/test enthält den Testcode des LibDriver AMG8833-Treibers und dieser Code kann die erforderliche Funktion des Chips einfach testen.
 
 /example enthält LibDriver AMG8833-Beispielcode.
 
 /doc enthält das LibDriver AMG8833-Offlinedokument.
 
-/Datenblatt enthält AMG8833-Datenblatt。
+/Datenblatt enthält AMG8833-Datenblatt.
 
 /project enthält den allgemeinen Beispielcode für Linux- und MCU-Entwicklungsboards. Alle Projekte verwenden das Shell-Skript, um den Treiber zu debuggen, und die detaillierten Anweisungen finden Sie in der README.md jedes Projekts.
 
