@@ -235,6 +235,7 @@ uint8_t amg8833_init(amg8833_handle_t *handle)
     if (res != 0)                                                                   /* check result */
     {
         handle->debug_print("amg8833: write pctl register failed.\n");              /* write pctl register failed */
+        (void)handle->iic_deinit();                                                 /* iic deinit */
        
         return 1;                                                                   /* return error */
     }
@@ -244,7 +245,8 @@ uint8_t amg8833_init(amg8833_handle_t *handle)
     if (res != 0)                                                                   /* check result */
     {
         handle->debug_print("amg8833: write rst register failed.\n");               /* write rst register failed */
-       
+        (void)handle->iic_deinit();                                                 /* iic deinit */
+        
         return 4;                                                                   /* return error */
     }
     handle->delay_ms(2);                                                            /* wait 2 ms */
@@ -253,7 +255,8 @@ uint8_t amg8833_init(amg8833_handle_t *handle)
     if (res != 0)                                                                   /* check result */
     {
         handle->debug_print("amg8833: write rst register failed.\n");               /* write rst register failed */
-       
+        (void)handle->iic_deinit();                                                 /* iic deinit */
+        
         return 4;                                                                   /* return error */
     }
     handle->inited = 1;                                                             /* flag finish initialization */
