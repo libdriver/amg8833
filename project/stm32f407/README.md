@@ -1,6 +1,6 @@
-### 1. chip
+### 1. Chip
 
-#### 1.1 chip info
+#### 1.1 Chip Info
 
 chip name : STM32F407ZGT6.
 
@@ -10,25 +10,25 @@ uart pin: TX/RX PA9/PA10.
 
 iic pin: SCL/SDA PB8/PB9.
 
-int pin: INT PB0
+int pin: INT PB0.
 
-### 2. shell
+### 2. Shell
 
-#### 2.1 shell parameter
+#### 2.1 Shell Parameter
 
-baud rate: 115200
+baud rate: 115200.
 
-data bits : 8
+data bits : 8.
 
-stop bits: 1
+stop bits: 1.
 
-parity: none
+parity: none.
 
-flow control: none
+flow control: none.
 
-### 3. amg8833
+### 3. AMG8833
 
-#### 3.1 command Instruction
+#### 3.1 Command Instruction
 
 ​          amg8833 is a basic command which can test all amg8833 driver function:
 
@@ -52,7 +52,7 @@ flow control: none
 
 ​           -c int  (0 | 1)  <times> <mode> <high> <low> <hysteresis>        run amg8833 interrupt function. times means test times. mode is the interrupt mode and it can be "abs" and "diff". high is the interrupt high level.   low is the interrupt low level. hysteresis is the hysteresis level.  
 
-#### 3.2 command example
+#### 3.2 Command Example
 
 ```shell
 amg8833 -i
