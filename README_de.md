@@ -51,6 +51,8 @@ Fügen Sie /src, /interface und /example zu Ihrem Projekt hinzu.
 #### example basic
 
 ```C
+#include "driver_amg8833_basic.h"
+
 uint32_t i, j, k, times;
 uint8_t res;
 
@@ -122,6 +124,8 @@ return 0;
 #### example interrupt
 
 ```c
+#include "driver_amg8833_interrupt.h"
+
 uint32_t i, times;
 uint8_t res;
 uint8_t (*g_gpio_irq)(void) = NULL;

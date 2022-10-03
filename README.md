@@ -28,15 +28,15 @@ LibDriver AMG8833 is a full function driver of AMG8833 launched by LibDriver.It 
 
 /src includes LibDriver AMG8833 source files.
 
-/interface includes LibDriver AMG8833 IIC platform independent template。
+/interface includes LibDriver AMG8833 IIC platform independent template.
 
-/test includes LibDriver AMG8833 driver test code and this code can test the chip necessary function simply。
+/test includes LibDriver AMG8833 driver test code and this code can test the chip necessary function simply.
 
 /example includes LibDriver AMG8833 sample code.
 
 /doc includes LibDriver AMG8833 offline document.
 
-/datasheet includes AMG8833 datasheet。
+/datasheet includes AMG8833 datasheet.
 
 /project includes the common Linux and MCU development board sample code. All projects use the shell script to debug the driver and the detail instruction can be found in each project's README.md.
 
@@ -51,6 +51,8 @@ Add /src, /interface and /example to your project.
 #### example basic
 
 ```C
+#include "driver_amg8833_basic.h"
+
 uint32_t i, j, k, times;
 uint8_t res;
 
@@ -121,6 +123,8 @@ return 0;
 #### example interrupt
 
 ```C
+#include "driver_amg8833_interrupt.h"
+
 uint32_t i, times;
 uint8_t res;
 uint8_t (*g_gpio_irq)(void) = NULL;
