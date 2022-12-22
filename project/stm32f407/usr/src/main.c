@@ -44,13 +44,14 @@
 #include "delay.h"
 #include "gpio.h"
 #include "uart.h"
+#include "getopt.h"
 #include <stdlib.h>
 
 /**
  * @brief global var definition
  */
 uint8_t g_buf[256];                        /**< uart buffer */
-uint16_t g_len;                            /**< uart buffer length */
+volatile uint16_t g_len;                   /**< uart buffer length */
 uint8_t (*g_gpio_irq)(void) = NULL;        /**< gpio irq */
 
 /**
@@ -71,7 +72,7 @@ void HAL_GPIO_EXTI_Callback(uint16_t pin)
 {
     if (pin == GPIO_PIN_0)
     {
-        if (g_gpio_irq)
+        if (g_gpio_irq != NULL)
         {
             g_gpio_irq();
         }
@@ -157,79 +158,110 @@ static void a_callback(uint8_t type)
  */
 uint8_t amg8833(uint8_t argc, char **argv)
 {
+    int c;
+    int longindex = 0;
+    const char short_options[] = "hipe:t:";
+    const struct option long_options[] =
+    {
+        {"help", no_argument, NULL, 'h'},
+        {"information", no_argument, NULL, 'i'},
+        {"port", no_argument, NULL, 'p'},
+        {"example", required_argument, NULL, 'e'},
+        {"test", required_argument, NULL, 't'},
+        {"addr", required_argument, NULL, 1},
+        {"high-threshold", required_argument, NULL, 2},
+        {"hysteresis-level", required_argument, NULL, 3},
+        {"low-threshold", required_argument, NULL, 4},
+        {"mode", required_argument, NULL, 5},
+        {"times", required_argument, NULL, 6},
+        {NULL, 0, NULL, 0},
+    };
+    char type[32] = "unknow";
+    uint32_t times = 3;
+    amg8833_address_t addr = AMG8833_ADDRESS_0;
+    amg8833_interrupt_mode_t mode = AMG8833_INTERRUPT_MODE_ABSOLUTE;
+    float high_threshold = 30.0f;
+    float low_threshold = 25.0f;
+    float hysteresis_level = 28.0f;
+    
+    /* if no params */
     if (argc == 1)
     {
+        /* goto the help */
         goto help;
     }
-    else if (argc == 2)
+    
+    /* init 0 */
+    optind = 0;
+    
+    /* parse */
+    do
     {
-        if (strcmp("-i", argv[1]) == 0)
+        /* parse the args */
+        c = getopt_long(argc, argv, short_options, long_options, &longindex);
+        
+        /* judge the result */
+        switch (c)
         {
-            amg8833_info_t info;
-            
-            /* print amg8833 info */
-            amg8833_info(&info);
-            amg8833_interface_debug_print("amg8833: chip is %s.\n", info.chip_name);
-            amg8833_interface_debug_print("amg8833: manufacturer is %s.\n", info.manufacturer_name);
-            amg8833_interface_debug_print("amg8833: interface is %s.\n", info.interface);
-            amg8833_interface_debug_print("amg8833: driver version is %d.%d.\n", info.driver_version / 1000, (info.driver_version % 1000) / 100);
-            amg8833_interface_debug_print("amg8833: min supply voltage is %0.1fV.\n", info.supply_voltage_min_v);
-            amg8833_interface_debug_print("amg8833: max supply voltage is %0.1fV.\n", info.supply_voltage_max_v);
-            amg8833_interface_debug_print("amg8833: max current is %0.2fmA.\n", info.max_current_ma);
-            amg8833_interface_debug_print("amg8833: max temperature is %0.1fC.\n", info.temperature_max);
-            amg8833_interface_debug_print("amg8833: min temperature is %0.1fC.\n", info.temperature_min);
-            
-            return 0;
-        }
-        else if (strcmp("-p", argv[1]) == 0)
-        {
-            /* print pin connection */
-            amg8833_interface_debug_print("amg8833: SCL connected to GPIOB PIN8.\n");
-            amg8833_interface_debug_print("amg8833: SDA connected to GPIOB PIN9.\n");
-            amg8833_interface_debug_print("amg8833: INT connected to GPIOB PIN0.\n");
-            
-            return 0;
-        }
-        else if (strcmp("-h", argv[1]) == 0)
-        {
-            /* show amg8833 help */
-            
-            help:
-            amg8833_interface_debug_print("amg8833 -i\n\tshow amg8833 chip and driver information.\n");
-            amg8833_interface_debug_print("amg8833 -h\n\tshow amg8833 help.\n");
-            amg8833_interface_debug_print("amg8833 -p\n\tshow amg8833 pin connections of the current board.\n");
-            amg8833_interface_debug_print("amg8833 -t reg (0 | 1)\n\trun amg8833 register test.\n");
-            amg8833_interface_debug_print("amg8833 -t read (0 | 1) <times>\n\trun amg8833 read test.times means test times.\n");
-            amg8833_interface_debug_print("amg8833 -t int (0 | 1) <times> <mode> <high> <low> <hysteresis>\n\trun amg8833 interrupt test."
-                                          "times means test times.mode is the interrupt mode and it can be \"abs\" and \"diff\".");
-            amg8833_interface_debug_print("high is the interrupt high level.low is the interrupt low level.hysteresis is the hysteresis level.\n");
-            amg8833_interface_debug_print("amg8833 -c read (0 | 1) <times>\n\trun amg8833 read function.times means test times.\n");
-            amg8833_interface_debug_print("amg8833 -c int (0 | 1) <times> <mode> <high> <low> <hysteresis>\n\trun amg8833 interrupt function."
-                                          "times means test times.mode is the interrupt mode and it can be \"abs\" and \"diff\"."); 
-            amg8833_interface_debug_print("high is the interrupt high level.low is the interrupt low level.hysteresis is the hysteresis level.\n");
-            
-            return 0;
-        }
-        else
-        {
-            return 5;
-        }
-    }
-    else if (argc == 4)
-    {
-        /* run test */
-        if (strcmp("-t", argv[1]) == 0)
-        {
-             /* reg test */
-            if (strcmp("reg", argv[2]) == 0)
+            /* help */
+            case 'h' :
             {
-                amg8833_address_t addr;
+                /* set the type */
+                memset(type, 0, sizeof(char) * 32);
+                snprintf(type, 32, "h");
                 
-                if (strcmp("0", argv[3]) == 0)
+                break;
+            }
+            
+            /* information */
+            case 'i' :
+            {
+                /* set the type */
+                memset(type, 0, sizeof(char) * 32);
+                snprintf(type, 32, "i");
+                
+                break;
+            }
+            
+            /* port */
+            case 'p' :
+            {
+                /* set the type */
+                memset(type, 0, sizeof(char) * 32);
+                snprintf(type, 32, "p");
+                
+                break;
+            }
+            
+            /* example */
+            case 'e' :
+            {
+                /* set the type */
+                memset(type, 0, sizeof(char) * 32);
+                snprintf(type, 32, "e_%s", optarg);
+                
+                break;
+            }
+            
+            /* test */
+            case 't' :
+            {
+                /* set the type */
+                memset(type, 0, sizeof(char) * 32);
+                snprintf(type, 32, "t_%s", optarg);
+                
+                break;
+            }
+            
+            /* addr */
+            case 1 :
+            {
+                /* set the addr pin */
+                if (strcmp("0", optarg) == 0)
                 {
                     addr = AMG8833_ADDRESS_0;
                 }
-                else if (strcmp("1", argv[3]) == 0)
+                else if (strcmp("1", optarg) == 0)
                 {
                     addr = AMG8833_ADDRESS_1;
                 }
@@ -238,332 +270,317 @@ uint8_t amg8833(uint8_t argc, char **argv)
                     return 5;
                 }
                 
-                /* run reg test */
-                if (amg8833_register_test(addr) != 0)
+                break;
+            }
+            
+            /* high threshold */
+            case 2 :
+            {
+                /* set the high threshold */
+                high_threshold = atof(optarg);
+                
+                break;
+            }
+            
+            /* hysteresis level */
+            case 3 :
+            {
+                /* set the hysteresis level */
+                hysteresis_level = atof(optarg);
+                
+                break;
+            }
+             
+            /* low threshold */
+            case 4 :
+            {
+                /* set the low threshold */
+                low_threshold = atof(optarg);
+                
+                break;
+            }
+            
+            /* mode */
+            case 5 :
+            {
+                /* set the mode */
+                if (strcmp("ABS", optarg) == 0)
                 {
-                    return 1;
+                    mode = AMG8833_INTERRUPT_MODE_ABSOLUTE;
+                }
+                else if (strcmp("DIFF", optarg) == 0)
+                {
+                    mode = AMG8833_INTERRUPT_MODE_DIFFERENCE;
                 }
                 else
                 {
-                    return 0;
+                    return 5;
                 }
+                
+                break;
             }
             
-            /* param is invalid */
-            else
+            /* running times */
+            case 6 :
+            {
+                /* set the times */
+                times = atol(optarg);
+                
+                break;
+            } 
+            
+            /* the end */
+            case -1 :
+            {
+                break;
+            }
+            
+            /* others */
+            default :
             {
                 return 5;
             }
+        }
+    } while (c != -1);
+
+    /* run the function */
+    if (strcmp("t_reg", type) == 0)
+    {
+        /* run reg test */
+        if (amg8833_register_test(addr) != 0)
+        {
+            return 1;
+        }
+        else
+        {
+            return 0;
+        }
+    }
+    else if (strcmp("t_read", type) == 0)
+    {
+        /* run read test */
+        if (amg8833_read_test(addr, times) != 0)
+        {
+            return 1;
+        }
+        else
+        {
+            return 0;
+        }
+    }
+    else if (strcmp("t_int", type) == 0)
+    {
+        /* set gpio irq */
+        g_gpio_irq = amg8833_interrupt_test_irq_handler;
+        
+        /* gpio init */
+        if (gpio_interrupt_init() != 0)
+        {
+            g_gpio_irq = NULL;
         }
         
-        /* param is invalid */
-        else
+        /* run interrupt test */
+        if (amg8833_interrupt_test(addr,
+                                   mode,
+                                   high_threshold,
+                                   low_threshold,
+                                   hysteresis_level,
+                                   times) != 0)
         {
-            return 5;
+            g_gpio_irq = NULL;
+            (void)gpio_interrupt_deinit();
+            
+            return 1;
         }
+        
+        /* gpio deinit */
+        g_gpio_irq = NULL;
+        (void)gpio_interrupt_deinit();
+        
+        return 0;
     }
-    else if (argc == 5)
+    else if (strcmp("e_read", type) == 0)
     {
-        /* run test */
-        if (strcmp("-t", argv[1]) == 0)
+        uint8_t res;
+        uint32_t i, j, k;
+        
+        /* init */
+        res = amg8833_basic_init(addr);
+        if (res != 0)
         {
-             /* read test */
-            if (strcmp("read", argv[2]) == 0)
+            return 1;
+        }
+        
+        /* delay 1000 ms */
+        amg8833_interface_delay_ms(1000);
+        
+        /* loop */
+        for (i = 0; i < times; i++)
+        {
+            float temp[8][8];
+            float tmp;
+            
+            /* read temperature array */
+            res = amg8833_basic_read_temperature_array(temp);
+            if (res != 0)
             {
-                amg8833_address_t addr;
+                amg8833_interface_debug_print("amg8833: read temperature array failed.\n");
+                (void)amg8833_basic_deinit();
                 
-                if (strcmp("0", argv[3]) == 0)
-                {
-                    addr = AMG8833_ADDRESS_0;
-                }
-                else if (strcmp("1", argv[3]) == 0)
-                {
-                    addr = AMG8833_ADDRESS_1;
-                }
-                else
-                {
-                    return 5;
-                }
-                
-                /* run read test */
-                if (amg8833_read_test(addr, atoi(argv[4])) != 0)
-                {
-                    return 1;
-                }
-                else
-                {
-                    return 0;
-                }
+                return 1;
             }
-            /* param is invalid */
             else
             {
-                return 5;
+                /* output */
+                for (j = 0; j < 8; j++)
+                {
+                    for (k = 0; k < 8; k++)
+                    {
+                        amg8833_interface_debug_print("%0.2f  ", temp[j][k]);
+                    }
+                    amg8833_interface_debug_print("\n");
+                }
             }
-        }
-        else if (strcmp("-c", argv[1]) == 0)
-        {
-             /* read function */
-            if (strcmp("read", argv[2]) == 0)
+            
+            /* read temperature */
+            res = amg8833_basic_read_temperature((float *)&tmp);
+            if (res != 0)
             {
-                amg8833_address_t addr;
-                uint32_t i, j, k, times;
-                uint8_t res;
+                (void)amg8833_basic_deinit();
                 
-                if (strcmp("0", argv[3]) == 0)
-                {
-                    addr = AMG8833_ADDRESS_0;
-                }
-                else if (strcmp("1", argv[3]) == 0)
-                {
-                    addr = AMG8833_ADDRESS_1;
-                }
-                else
-                {
-                    return 5;
-                }
-                
-                /* get times */
-                times = atoi(argv[4]);
-                
-                /* init */
-                res = amg8833_basic_init(addr);
-                if (res != 0)
-                {
-                    return 1;
-                }
-                
-                /* delay 1000 ms */
-                amg8833_interface_delay_ms(1000);
-                
-                for (i = 0; i < times; i++)
-                {
-                    float temp[8][8];
-                    float tmp;
-                    
-                    /* read temperature array */
-                    res = amg8833_basic_read_temperature_array(temp);
-                    if (res != 0)
-                    {
-                        amg8833_interface_debug_print("amg8833: read temperature array failed.\n");
-                        (void)amg8833_basic_deinit();
-                        
-                        return 1;
-                    }
-                    else
-                    {
-                        for (j = 0; j < 8; j++)
-                        {
-                            for (k = 0; k < 8; k++)
-                            {
-                                amg8833_interface_debug_print("%0.2f  ", temp[j][k]);
-                            }
-                            amg8833_interface_debug_print("\n");
-                        }
-                    }
-                    
-                    /* read temperature */
-                    res = amg8833_basic_read_temperature((float *)&tmp);
-                    if (res != 0)
-                    {
-                        (void)amg8833_basic_deinit();
-                       
-                        return 1;
-                    }
-                    else
-                    {
-                        amg8833_interface_debug_print("amg8833: temperature is %0.3fC.\n", tmp);
-                    }
-                    
-                    /* delay 1000 ms */
-                    amg8833_interface_delay_ms(1000);
-                }
-                
-                return amg8833_basic_deinit();
+                return 1;
             }
-            /* param is invalid */
-            else
-            {
-                return 5;
-            }
+            
+            /* output */
+            amg8833_interface_debug_print("amg8833: temperature is %0.3fC.\n", tmp);
+            
+            /* delay 1000 ms */
+            amg8833_interface_delay_ms(1000);
         }
-        /* param is invalid */
-        else
-        {
-            return 5;
-        }
+        
+        /* deinit */
+        (void)amg8833_basic_deinit();
+        
+        return 0;
     }
-    else if (argc == 9)
+    else if (strcmp("e_int", type) == 0)
     {
-        /* run test */
-        if (strcmp("-t", argv[1]) == 0)
+        uint8_t res;
+        uint32_t i;
+        
+        /* set gpio irq */
+        g_gpio_irq = amg8833_interrupt_irq_handler;
+        
+        /* gpio init */
+        if (gpio_interrupt_init() != 0)
         {
-             /* read test */
-            if (strcmp("int", argv[2]) == 0)
-            {
-                amg8833_address_t addr;
-                amg8833_interrupt_mode_t mode;
-                
-                if (strcmp("0", argv[3]) == 0)
-                {
-                    addr = AMG8833_ADDRESS_0;
-                }
-                else if (strcmp("1", argv[3]) == 0)
-                {
-                    addr = AMG8833_ADDRESS_1;
-                }
-                else
-                {
-                    return 5;
-                }
-                
-                if (strcmp("abs", argv[5]) == 0)
-                {
-                    mode = AMG8833_INTERRUPT_MODE_ABSOLUTE;
-                    amg8833_interface_debug_print("amg8833: absolute mode.\n");
-                }
-                else if (strcmp("diff", argv[5]) == 0)
-                {
-                    mode = AMG8833_INTERRUPT_MODE_DIFFERENCE;
-                    amg8833_interface_debug_print("amg8833: difference mode.\n");
-                }
-                else
-                {
-                    return 5;
-                }
-                
-                /* run interrupt test */
-                g_gpio_irq = amg8833_interrupt_test_irq_handler;
-                if (gpio_interrupt_init() != 0)
-                {
-                    g_gpio_irq = NULL;
-                }
-                if (amg8833_interrupt_test(addr, mode,
-                                          (float)atof(argv[6]),
-                                          (float)atof(argv[7]),
-                                          (float)atof(argv[8]),
-                                           atoi(argv[4])) != 0)
-                {
-                    g_gpio_irq = NULL;
-                    (void)gpio_interrupt_deinit();
-                    
-                    return 1;
-                }
-                else
-                {
-                    g_gpio_irq = NULL;
-                    (void)gpio_interrupt_deinit();
-                    
-                    return 0;
-                }
-            }
-            /* param is invalid */
-            else
-            {
-                return 5;
-            }
+            g_gpio_irq = NULL;
         }
-        /* run function */
-        else if (strcmp("-c", argv[1]) == 0)
+        
+        /* interrupt init */
+        if (amg8833_interrupt_init(addr, 
+                                   mode,
+                                   high_threshold,
+                                   low_threshold,
+                                   hysteresis_level,
+                                   a_callback) != 0)
         {
-             /* read function */
-            if (strcmp("int", argv[2]) == 0)
+            g_gpio_irq = NULL;
+            (void)gpio_interrupt_deinit();
+            
+            return 1;
+        }
+        
+        /* delay 1000 ms */
+        amg8833_interface_delay_ms(1000);
+        
+        /* loop */
+        for (i = 0; i < times; i++)
+        {
+            float temp;
+            
+            /* read data */
+            res = amg8833_interrupt_read_temperature((float *)&temp);
+            if (res != 0)
             {
-                uint32_t i, times;
-                uint8_t res;
-                amg8833_address_t addr;
-                amg8833_interrupt_mode_t mode;
-                
-                if (strcmp("0", argv[3]) == 0)
-                {
-                    addr = AMG8833_ADDRESS_0;
-                }
-                else if (strcmp("1", argv[3]) == 0)
-                {
-                    addr = AMG8833_ADDRESS_1;
-                }
-                else
-                {
-                    return 5;
-                }
-                
-                if (strcmp("abs", argv[5]) == 0)
-                {
-                    mode = AMG8833_INTERRUPT_MODE_ABSOLUTE;
-                    amg8833_interface_debug_print("amg8833: absolute mode.\n");
-                }
-                else if (strcmp("diff", argv[5]) == 0)
-                {
-                    mode = AMG8833_INTERRUPT_MODE_DIFFERENCE;
-                    amg8833_interface_debug_print("amg8833: difference mode.\n");
-                }
-                else
-                {
-                    return 5;
-                }
-                
-                /* run interrupt test */
-                g_gpio_irq = amg8833_interrupt_irq_handler;
-                if (gpio_interrupt_init() != 0)
-                {
-                    g_gpio_irq = NULL;
-                }
-                times = atoi(argv[4]);
-                if (interrupt_interrupt_init(addr, 
-                                             mode,
-                                            (float)atof(argv[6]),
-                                            (float)atof(argv[7]),
-                                            (float)atof(argv[8]),
-                                             a_callback) != 0)
-                {
-                    g_gpio_irq = NULL;
-                    (void)gpio_interrupt_deinit();
-                    
-                    return 1;
-                }
-                
-                /* delay 1000 ms */
-                amg8833_interface_delay_ms(1000);
-                for (i = 0; i < times; i++)
-                {
-                    float temp;
-                    
-                    res = amg8833_interrupt_read_temperature((float *)&temp);
-                    if (res != 0)
-                    {
-                        (void)amg8833_interrupt_deinit();
-                        g_gpio_irq = NULL;
-                        (void)gpio_interrupt_deinit();
-                    }
-                    else
-                    {
-                        amg8833_interface_debug_print("amg8833: temperature is %0.3fC.\n", temp);
-                    }
-                    
-                    /* delay 1000 ms */
-                    amg8833_interface_delay_ms(1000);
-                }
-                
-                /* deinit */
                 (void)amg8833_interrupt_deinit();
                 g_gpio_irq = NULL;
                 (void)gpio_interrupt_deinit();
-                
-                return 0;
             }
-            /* param is invalid */
-            else
-            {
-                return 5;
-            }
+            
+            /* output */
+            amg8833_interface_debug_print("amg8833: temperature is %0.3fC.\n", temp);
+            
+            /* delay 1000 ms */
+            amg8833_interface_delay_ms(1000);
         }
-        /* param is invalid */
-        else
-        {
-            return 5;
-        }
+        
+        /* deinit */
+        (void)amg8833_interrupt_deinit();
+        g_gpio_irq = NULL;
+        (void)gpio_interrupt_deinit();
+        
+        return 0;
     }
-    /* param is invalid */
+    else if (strcmp("h", type) == 0)
+    {
+        help:
+        amg8833_interface_debug_print("Usage:\n");
+        amg8833_interface_debug_print("  amg8833 (-i | --information)\n");
+        amg8833_interface_debug_print("  amg8833 (-h | --help)\n");
+        amg8833_interface_debug_print("  amg8833 (-p | --port)\n");
+        amg8833_interface_debug_print("  amg8833 (-t reg | --test=reg) [--addr=<0 | 1>]\n");
+        amg8833_interface_debug_print("  amg8833 (-t read | --test=read) [--addr=<0 | 1>] [--times=<num>]\n");
+        amg8833_interface_debug_print("  amg8833 (-t int | --test=int) [--addr=<0 | 1>] [--times=<num>] [--mode=<ABS | DIFF>]\n");
+        amg8833_interface_debug_print("          [--high-threshold=<high>] [--low-threshold=<low>] [--hysteresis-level=<hysteresis>]\n");
+        amg8833_interface_debug_print("  amg8833 (-e read | --example=read) [--addr=<0 | 1>] [--times=<num>]\n");
+        amg8833_interface_debug_print("  amg8833 (-e int | --example=int) [--addr=<0 | 1>] [--times=<num>] [--mode=<ABS | DIFF>]\n");
+        amg8833_interface_debug_print("          [--high-threshold=<high>] [--low-threshold=<low>] [--hysteresis-level=<hysteresis>]\n");
+        amg8833_interface_debug_print("\n");
+        amg8833_interface_debug_print("Options:\n");
+        amg8833_interface_debug_print("      --addr=<0 | 1>                     Set the chip iic address.([default: 0])\n");
+        amg8833_interface_debug_print("  -e <read | int>, --example=<read | int>\n");
+        amg8833_interface_debug_print("                                         Run the driver example.\n");
+        amg8833_interface_debug_print("  -h, --help                             Show the help.\n");
+        amg8833_interface_debug_print("      --high-threshold=<high>            Set the interrupt high threshold.([default: 30.0f])\n");
+        amg8833_interface_debug_print("      --hysteresis-level=<hysteresis>    Set the hysteresis level.([default: 28.0f])\n");
+        amg8833_interface_debug_print("      --low-threshold=<low>              Set the interrupt low threshold.([default: 25.0f])\n");
+        amg8833_interface_debug_print("  -i, --information                      Show the chip information.\n");
+        amg8833_interface_debug_print("      --mode=<ABS | DIFF>                Set the interrupt mode.([default: ABS])\n");
+        amg8833_interface_debug_print("  -p, --port                             Display the pin connections of the current board.\n");
+        amg8833_interface_debug_print("  -t <reg | read | int>, --test=<reg | read | int>\n");
+        amg8833_interface_debug_print("                                         Run the driver test.\n");
+        amg8833_interface_debug_print("      --times=<num>                      Set the running times.([default: 3])\n");
+        
+        return 0;
+    }
+    else if (strcmp("i", type) == 0)
+    {
+        amg8833_info_t info;
+        
+        /* print amg8833 info */
+        amg8833_info(&info);
+        amg8833_interface_debug_print("amg8833: chip is %s.\n", info.chip_name);
+        amg8833_interface_debug_print("amg8833: manufacturer is %s.\n", info.manufacturer_name);
+        amg8833_interface_debug_print("amg8833: interface is %s.\n", info.interface);
+        amg8833_interface_debug_print("amg8833: driver version is %d.%d.\n", info.driver_version / 1000, (info.driver_version % 1000) / 100);
+        amg8833_interface_debug_print("amg8833: min supply voltage is %0.1fV.\n", info.supply_voltage_min_v);
+        amg8833_interface_debug_print("amg8833: max supply voltage is %0.1fV.\n", info.supply_voltage_max_v);
+        amg8833_interface_debug_print("amg8833: max current is %0.2fmA.\n", info.max_current_ma);
+        amg8833_interface_debug_print("amg8833: max temperature is %0.1fC.\n", info.temperature_max);
+        amg8833_interface_debug_print("amg8833: min temperature is %0.1fC.\n", info.temperature_min);
+        
+        return 0;
+    }
+    else if (strcmp("p", type) == 0)
+    {
+        /* print pin connection */
+        amg8833_interface_debug_print("amg8833: SCL connected to GPIOB PIN8.\n");
+        amg8833_interface_debug_print("amg8833: SDA connected to GPIOB PIN9.\n");
+        amg8833_interface_debug_print("amg8833: INT connected to GPIOB PIN0.\n");
+        
+        return 0;
+    }
     else
     {
         return 5;
@@ -584,19 +601,19 @@ int main(void)
     /* delay init */
     delay_init();
     
-    /* uart1 init */
-    uart1_init(115200);
+    /* uart init */
+    uart_init(115200);
     
     /* shell init && register amg8833 fuction */
     shell_init();
     shell_register("amg8833", amg8833);
-    uart1_print("amg8833: welcome to libdriver amg8833.\n");
+    uart_print("amg8833: welcome to libdriver amg8833.\n");
 
     while (1)
     {
         /* read uart */
-        g_len = uart1_read(g_buf, 256);
-        if (g_len)
+        g_len = uart_read(g_buf, 256);
+        if (g_len != 0)
         {
             /* run shell */
             res = shell_parse((char *)g_buf, g_len);
@@ -606,29 +623,29 @@ int main(void)
             }
             else if (res == 1)
             {
-                uart1_print("amg8833: run failed.\n");
+                uart_print("amg8833: run failed.\n");
             }
             else if (res == 2)
             {
-                uart1_print("amg8833: unknow command.\n");
+                uart_print("amg8833: unknow command.\n");
             }
             else if (res == 3)
             {
-                uart1_print("amg8833: length is too long.\n");
+                uart_print("amg8833: length is too long.\n");
             }
             else if (res == 4)
             {
-                uart1_print("amg8833: pretreat failed.\n");
+                uart_print("amg8833: pretreat failed.\n");
             }
             else if (res == 5)
             {
-                uart1_print("amg8833: param is invalid.\n");
+                uart_print("amg8833: param is invalid.\n");
             }
             else
             {
-                uart1_print("amg8833: unknow status code.\n");
+                uart_print("amg8833: unknow status code.\n");
             }
-            uart1_flush();
+            uart_flush();
         }
         delay_ms(100);
     }

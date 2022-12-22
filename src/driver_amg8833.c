@@ -79,7 +79,7 @@
 
 /**
  * @brief      read bytes
- * @param[in]  *handle points to a amg8833 handle structure
+ * @param[in]  *handle points to an amg8833 handle structure
  * @param[in]  reg is the iic register address
  * @param[out] *data points to a data buffer
  * @param[in]  len is the data length
@@ -102,7 +102,7 @@ static uint8_t a_amg8833_iic_read(amg8833_handle_t *handle, uint8_t reg, uint8_t
 
 /**
  * @brief     write bytes
- * @param[in] *handle points to a amg8833 handle structure
+ * @param[in] *handle points to an amg8833 handle structure
  * @param[in] reg is the iic register address
  * @param[in] *data points to a data buffer
  * @param[in] len is the data length
@@ -125,7 +125,7 @@ static uint8_t a_amg8833_iic_write(amg8833_handle_t *handle, uint8_t reg, uint8_
 
 /**
  * @brief     set the iic address pin
- * @param[in] *handle points to a amg8833 handle structure
+ * @param[in] *handle points to an amg8833 handle structure
  * @param[in] addr_pin is the address pin
  * @return    status code
  *            - 0 success
@@ -146,8 +146,8 @@ uint8_t amg8833_set_addr_pin(amg8833_handle_t *handle, amg8833_address_t addr_pi
 
 /**
  * @brief      get the iic address pin
- * @param[in]  *handle points to a amg8833 handle structure
- * @param[out] *addr_pin points to a address pin buffer
+ * @param[in]  *handle points to an amg8833 handle structure
+ * @param[out] *addr_pin points to an address pin buffer
  * @return     status code
  *             - 0 success
  *             - 2 handle is NULL
@@ -167,7 +167,7 @@ uint8_t amg8833_get_addr_pin(amg8833_handle_t *handle, amg8833_address_t *addr_p
 
 /**
  * @brief     initialize the chip
- * @param[in] *handle points to a amg8833 handle structure
+ * @param[in] *handle points to an amg8833 handle structure
  * @return    status code
  *            - 0 success
  *            - 1 iic initialization failed
@@ -266,7 +266,7 @@ uint8_t amg8833_init(amg8833_handle_t *handle)
 
 /**
  * @brief     close the chip
- * @param[in] *handle points to a amg8833 handle structure
+ * @param[in] *handle points to an amg8833 handle structure
  * @return    status code
  *            - 0 success
  *            - 1 iic deinit failed
@@ -313,7 +313,7 @@ uint8_t amg8833_deinit(amg8833_handle_t *handle)
 
 /**
  * @brief     irq handler
- * @param[in] *handle points to a amg8833 handle structure
+ * @param[in] *handle points to an amg8833 handle structure
  * @return    status code
  *            - 0 success
  *            - 1 run failed
@@ -375,7 +375,7 @@ uint8_t amg8833_irq_handler(amg8833_handle_t *handle)
 
 /**
  * @brief     set the mode
- * @param[in] *handle points to a amg8833 handle structure
+ * @param[in] *handle points to an amg8833 handle structure
  * @param[in] mode is the chip mode
  * @return    status code
  *            - 0 success
@@ -412,7 +412,7 @@ uint8_t amg8833_set_mode(amg8833_handle_t *handle, amg8833_mode_t mode)
 
 /**
  * @brief      get the mode
- * @param[in]  *handle points to a amg8833 handle structure
+ * @param[in]  *handle points to an amg8833 handle structure
  * @param[out] *mode points to a chip mode buffer
  * @return     status code
  *             - 0 success
@@ -449,7 +449,7 @@ uint8_t amg8833_get_mode(amg8833_handle_t *handle, amg8833_mode_t *mode)
 
 /**
  * @brief     reset the chip
- * @param[in] *handle points to a amg8833 handle structure
+ * @param[in] *handle points to an amg8833 handle structure
  * @param[in] type is the reset type
  * @return    status code
  *            - 0 success
@@ -486,7 +486,7 @@ uint8_t amg8833_reset(amg8833_handle_t *handle, amg8833_reset_type_t type)
 
 /**
  * @brief     set the frame rate
- * @param[in] *handle points to a amg8833 handle structure
+ * @param[in] *handle points to an amg8833 handle structure
  * @param[in] rate is the frame rate
  * @return    status code
  *            - 0 success
@@ -531,7 +531,7 @@ uint8_t amg8833_set_frame_rate(amg8833_handle_t *handle, amg8833_frame_rate_t ra
 
 /**
  * @brief      get the frame rate
- * @param[in]  *handle points to a amg8833 handle structure
+ * @param[in]  *handle points to an amg8833 handle structure
  * @param[out] *rate points to a frame rate buffer
  * @return     status code
  *             - 0 success
@@ -568,7 +568,7 @@ uint8_t amg8833_get_frame_rate(amg8833_handle_t *handle, amg8833_frame_rate_t *r
 
 /**
  * @brief     set the interrupt mode
- * @param[in] *handle points to a amg8833 handle structure
+ * @param[in] *handle points to an amg8833 handle structure
  * @param[in] mode is the interrupt mode
  * @return    status code
  *            - 0 success
@@ -613,8 +613,8 @@ uint8_t amg8833_set_interrupt_mode(amg8833_handle_t *handle, amg8833_interrupt_m
 
 /**
  * @brief      get the interrupt mode
- * @param[in]  *handle points to a amg8833 handle structure
- * @param[out] *mode points to a interrupt mode buffer
+ * @param[in]  *handle points to an amg8833 handle structure
+ * @param[out] *mode points to an interrupt mode buffer
  * @return     status code
  *             - 0 success
  *             - 1 get interrupt mode failed
@@ -650,7 +650,7 @@ uint8_t amg8833_get_interrupt_mode(amg8833_handle_t *handle, amg8833_interrupt_m
 
 /**
  * @brief     enable or disable the interrupt
- * @param[in] *handle points to a amg8833 handle structure
+ * @param[in] *handle points to an amg8833 handle structure
  * @param[in] enable is a bool value
  * @return    status code
  *            - 0 success
@@ -695,7 +695,7 @@ uint8_t amg8833_set_interrupt(amg8833_handle_t *handle, amg8833_bool_t enable)
 
 /**
  * @brief      get the interrupt status
- * @param[in]  *handle points to a amg8833 handle structure
+ * @param[in]  *handle points to an amg8833 handle structure
  * @param[out] *enable points to a bool value buffer
  * @return     status code
  *             - 0 success
@@ -732,7 +732,7 @@ uint8_t amg8833_get_interrupt(amg8833_handle_t *handle, amg8833_bool_t *enable)
 
 /**
  * @brief      get the status
- * @param[in]  *handle points to a amg8833 handle structure
+ * @param[in]  *handle points to an amg8833 handle structure
  * @param[out] *status points to a status buffer
  * @return     status code
  *             - 0 success
@@ -769,7 +769,7 @@ uint8_t amg8833_get_status(amg8833_handle_t *handle, uint8_t *status)
 
 /**
  * @brief     clear the interrupt status
- * @param[in] *handle points to a amg8833 handle structure
+ * @param[in] *handle points to an amg8833 handle structure
  * @param[in] status is the cleared interrupt status
  * @return    status code
  *            - 0 success
@@ -806,7 +806,7 @@ uint8_t amg8833_clear_status(amg8833_handle_t *handle, amg8833_status_t status)
 
 /**
  * @brief     set the average_mode
- * @param[in] *handle points to a amg8833 handle structure
+ * @param[in] *handle points to an amg8833 handle structure
  * @param[in] mode is the average mode
  * @return    status code
  *            - 0 success
@@ -851,8 +851,8 @@ uint8_t amg8833_set_average_mode(amg8833_handle_t *handle, amg8833_average_mode_
 
 /**
  * @brief      get the average_mode
- * @param[in]  *handle points to a amg8833 handle structure
- * @param[out] *mode points to a average mode buffer
+ * @param[in]  *handle points to an amg8833 handle structure
+ * @param[out] *mode points to an average mode buffer
  * @return     status code
  *             - 0 success
  *             - 1 get average mode failed
@@ -888,7 +888,7 @@ uint8_t amg8833_get_average_mode(amg8833_handle_t *handle, amg8833_average_mode_
 
 /**
  * @brief     set the interrupt high level
- * @param[in] *handle points to a amg8833 handle structure
+ * @param[in] *handle points to an amg8833 handle structure
  * @param[in] level is the interrupt high level
  * @return    status code
  *            - 0 success
@@ -933,8 +933,8 @@ uint8_t amg8833_set_interrupt_high_level(amg8833_handle_t *handle, int16_t level
 
 /**
  * @brief      get the interrupt high level
- * @param[in]  *handle points to a amg8833 handle structure
- * @param[out] *level points to a interrupt high level buffer
+ * @param[in]  *handle points to an amg8833 handle structure
+ * @param[out] *level points to an interrupt high level buffer
  * @return     status code
  *             - 0 success
  *             - 1 get interrupt high level failed
@@ -985,7 +985,7 @@ uint8_t amg8833_get_interrupt_high_level(amg8833_handle_t *handle, int16_t *leve
 
 /**
  * @brief     set the interrupt low level
- * @param[in] *handle points to a amg8833 handle structure
+ * @param[in] *handle points to an amg8833 handle structure
  * @param[in] level is the interrupt low level
  * @return    status code
  *            - 0 success
@@ -1030,8 +1030,8 @@ uint8_t amg8833_set_interrupt_low_level(amg8833_handle_t *handle, int16_t level)
 
 /**
  * @brief      get the interrupt low level
- * @param[in]  *handle points to a amg8833 handle structure
- * @param[out] *level points to a interrupt low level buffer
+ * @param[in]  *handle points to an amg8833 handle structure
+ * @param[out] *level points to an interrupt low level buffer
  * @return     status code
  *             - 0 success
  *             - 1 get interrupt low level failed
@@ -1082,7 +1082,7 @@ uint8_t amg8833_get_interrupt_low_level(amg8833_handle_t *handle, int16_t *level
 
 /**
  * @brief     set the interrupt hysteresis level
- * @param[in] *handle points to a amg8833 handle structure
+ * @param[in] *handle points to an amg8833 handle structure
  * @param[in] level is the interrupt hysteresis level
  * @return    status code
  *            - 0 success
@@ -1127,8 +1127,8 @@ uint8_t amg8833_set_interrupt_hysteresis_level(amg8833_handle_t *handle, int16_t
 
 /**
  * @brief      get the interrupt hysteresis level
- * @param[in]  *handle points to a amg8833 handle structure
- * @param[out] *level points to a interrupt hysteresis level buffer
+ * @param[in]  *handle points to an amg8833 handle structure
+ * @param[out] *level points to an interrupt hysteresis level buffer
  * @return     status code
  *             - 0 success
  *             - 1 get interrupt hysteresis level failed
@@ -1179,7 +1179,7 @@ uint8_t amg8833_get_interrupt_hysteresis_level(amg8833_handle_t *handle, int16_t
 
 /**
  * @brief      convert the interrupt level to the register raw data
- * @param[in]  *handle points to a amg8833 handle structure
+ * @param[in]  *handle points to an amg8833 handle structure
  * @param[in]  temp is the temperature
  * @param[out] *reg points to a register raw buffer
  * @return     status code
@@ -1206,7 +1206,7 @@ uint8_t amg8833_interrupt_level_convert_to_register(amg8833_handle_t *handle, fl
 
 /**
  * @brief      convert the register raw data to the interrupt level
- * @param[in]  *handle points to a amg8833 handle structure
+ * @param[in]  *handle points to an amg8833 handle structure
  * @param[in]  reg is the register raw data
  * @param[out] *temp points to a temperature buffer
  * @return     status code
@@ -1233,7 +1233,7 @@ uint8_t amg8833_interrupt_level_convert_to_data(amg8833_handle_t *handle, int16_
 
 /**
  * @brief      read the temperature
- * @param[in]  *handle points to a amg8833 handle structure
+ * @param[in]  *handle points to an amg8833 handle structure
  * @param[out] *raw points to a raw temperatue buffer
  * @param[out] *temp points to a converted temperatue buffer
  * @return     status code
@@ -1285,7 +1285,7 @@ uint8_t amg8833_read_temperature(amg8833_handle_t *handle, int16_t *raw, float *
 
 /**
  * @brief      read the temperature array
- * @param[in]  *handle points to a amg8833 handle structure
+ * @param[in]  *handle points to an amg8833 handle structure
  * @param[out] **raw points to a raw temperature buffer
  * @param[out] **temp points to a converted temperature buffer
  * @return     status code
@@ -1339,8 +1339,8 @@ uint8_t amg8833_read_temperature_array(amg8833_handle_t *handle, int16_t raw[8][
 
 /**
  * @brief      get the interrupt table
- * @param[in]  *handle points to a amg8833 handle structure
- * @param[out] **table points to a interrupt table buffer
+ * @param[in]  *handle points to an amg8833 handle structure
+ * @param[out] **table points to an interrupt table buffer
  * @return     status code
  *             - 0 success
  *             - 1 get interrupt table failed
@@ -1429,7 +1429,7 @@ uint8_t amg8833_get_interrupt_table(amg8833_handle_t *handle, uint8_t table[8][1
 
 /**
  * @brief     set the chip register
- * @param[in] *handle points to a amg8833 handle structure
+ * @param[in] *handle points to an amg8833 handle structure
  * @param[in] reg is the register address
  * @param[in] *buf points to a data buffer
  * @param[in] len is the data buffer length
@@ -1456,7 +1456,7 @@ uint8_t amg8833_set_reg(amg8833_handle_t *handle, uint8_t reg, uint8_t *buf, uin
 
 /**
  * @brief      get the chip register
- * @param[in]  *handle points to a amg8833 handle structure
+ * @param[in]  *handle points to an amg8833 handle structure
  * @param[in]  reg is the register address
  * @param[out] *buf points to a data buffer
  * @param[in]  len is the data buffer length
@@ -1483,7 +1483,7 @@ uint8_t amg8833_get_reg(amg8833_handle_t *handle, uint8_t reg, uint8_t *buf, uin
 
 /**
  * @brief      get chip's information
- * @param[out] *info points to a amg8833 info structure
+ * @param[out] *info points to an amg8833 info structure
  * @return     status code
  *             - 0 success
  *             - 2 handle is NULL

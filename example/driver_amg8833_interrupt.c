@@ -70,12 +70,12 @@ uint8_t amg8833_interrupt_irq_handler(void)
  *            - 1 init failed
  * @note      none
  */
-uint8_t interrupt_interrupt_init(amg8833_address_t addr_pin,
-                                 amg8833_interrupt_mode_t mode,
-                                 float high_level, float low_level, 
-                                 float hysteresis_level,
-                                 void (*callback)(uint8_t type) 
-                                 )
+uint8_t amg8833_interrupt_init(amg8833_address_t addr_pin,
+                               amg8833_interrupt_mode_t mode,
+                               float high_level, float low_level, 
+                               float hysteresis_level,
+                               void (*callback)(uint8_t type) 
+                              )
 {
     uint8_t res;
     int16_t level;

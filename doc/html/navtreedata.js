@@ -24,8 +24,7 @@
 */
 var NAVTREE =
 [
-  [ "LidDriver AMG8833", "index.html", [
-    [ "LibDriver AMG8833", "index.html", null ],
+  [ "LibDriver AMG8833", "index.html", [
     [ "Modules", "modules.html", "modules" ],
     [ "Data Structures", "annotated.html", [
       [ "Data Structures", "annotated.html", "annotated_dup" ],
