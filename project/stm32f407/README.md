@@ -66,25 +66,25 @@ We use '\n' to wrap lines.If your serial port assistant displays exceptions (e.g
    amg8833 (-t reg | --test=reg) [--addr=<0 | 1>]
    ```
 
-5. Run amg8833 read test, times means test times.
+5. Run amg8833 read test, num means test times.
 
    ```shell
    amg8833 (-t read | --test=read) [--addr=<0 | 1>] [--times=<num>]
    ```
 
-6. Run amg8833 interrupt test, times means test times, mode is the interrupt mode and it can be "ABS" and "DIFF", high is the interrupt high level, low is the interrupt low level and hysteresis is the hysteresis level.   
+6. Run amg8833 interrupt test, num means test times, mode is the interrupt mode and it can be "ABS" and "DIFF", high is the interrupt high level, low is the interrupt low level and hysteresis is the hysteresis level.   
 
    ```shell
    amg8833 (-t int | --test=int) [--addr=<0 | 1>] [--times=<num>] [--mode=<ABS | DIFF>] [--high-threshold=<high>] [--low-threshold=<low>] [--hysteresis-level=<hysteresis>]
    ```
 
-7. Run amg8833 read function, times means test times.  
+7. Run amg8833 read function, num means test times.  
 
    ```shell
    amg8833 (-e read | --example=read) [--addr=<0 | 1>] [--times=<num>]
    ```
 
-8. Run amg8833 interrupt function, times means test times, mode is the interrupt mode and it can be "ABS" and "DIFF", high is the interrupt high level, low is the interrupt low level and hysteresis is the hysteresis level.  
+8. Run amg8833 interrupt function, num means test times, mode is the interrupt mode and it can be "ABS" and "DIFF", high is the interrupt high level, low is the interrupt low level and hysteresis is the hysteresis level.  
 
    ```shell
    amg8833 (-e int | --example=int) [--addr=<0 | 1>] [--times=<num>] [--mode=<ABS | DIFF>] [--high-threshold=<high>] [--low-threshold=<low>] [--hysteresis-level=<hysteresis>]
