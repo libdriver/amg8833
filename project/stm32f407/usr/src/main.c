@@ -40,6 +40,7 @@
 #include "driver_amg8833_basic.h"
 #include "driver_amg8833_interrupt.h"
 #include "shell.h"
+#include "mutex.h"
 #include "clock.h"
 #include "delay.h"
 #include "gpio.h"
@@ -72,10 +73,8 @@ void HAL_GPIO_EXTI_Callback(uint16_t pin)
 {
     if (pin == GPIO_PIN_0)
     {
-        if (g_gpio_irq != NULL)
-        {
-            g_gpio_irq();
-        }
+        /* run the callback in the mutex mode */
+        mutex_irq(g_gpio_irq);
     }
 }
 
@@ -499,6 +498,9 @@ uint8_t amg8833(uint8_t argc, char **argv)
         {
             float temp;
             
+            /* mutex lock */
+            (void)mutex_lock();
+            
             /* read data */
             res = amg8833_interrupt_read_temperature((float *)&temp);
             if (res != 0)
@@ -506,7 +508,11 @@ uint8_t amg8833(uint8_t argc, char **argv)
                 (void)amg8833_interrupt_deinit();
                 g_gpio_irq = NULL;
                 (void)gpio_interrupt_deinit();
+                (void)mutex_unlock();
             }
+            
+            /* mutex unlock */
+            (void)mutex_unlock();
             
             /* output */
             amg8833_interface_debug_print("amg8833: temperature is %0.3fC.\n", temp);
