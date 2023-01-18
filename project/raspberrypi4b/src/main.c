@@ -40,6 +40,7 @@
 #include "driver_amg8833_basic.h"
 #include "driver_amg8833_interrupt.h"
 #include "gpio.h"
+#include "mutex.h"
 #include <getopt.h>
 #include <stdlib.h>
 
@@ -465,6 +466,9 @@ uint8_t amg8833(uint8_t argc, char **argv)
         {
             float temp;
             
+            /* mutex lock */
+            (void)mutex_lock();
+            
             /* read data */
             res = amg8833_interrupt_read_temperature((float *)&temp);
             if (res != 0)
@@ -472,7 +476,11 @@ uint8_t amg8833(uint8_t argc, char **argv)
                 (void)amg8833_interrupt_deinit();
                 g_gpio_irq = NULL;
                 (void)gpio_interrupt_deinit();
+                (void)mutex_unlock();
             }
+            
+            /* mutex unlock */
+            (void)mutex_unlock();
             
             /* output */
             amg8833_interface_debug_print("amg8833: temperature is %0.3fC.\n", temp);
