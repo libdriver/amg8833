@@ -970,7 +970,7 @@ uint8_t amg8833_get_interrupt_high_level(amg8833_handle_t *handle, int16_t *leve
        
         return 1;                                                                     /* return error */
     }
-    if ((buf[1] & (1 << 3)) != 0)                                                     /* check negtive */
+    if ((buf[1] & (1 << 3)) != 0)                                                     /* check negative */
     {
         *level = (int16_t)(((uint16_t)(buf[1]) << 8) | 
                  ((uint16_t)(0xF) << 12) | (buf[0] << 0));                            /* get the level */
@@ -1067,7 +1067,7 @@ uint8_t amg8833_get_interrupt_low_level(amg8833_handle_t *handle, int16_t *level
        
         return 1;                                                                     /* return error */
     }
-    if ((buf[1] & (1 << 3)) != 0)                                                     /* check negtive */
+    if ((buf[1] & (1 << 3)) != 0)                                                     /* check negative */
     {
         *level = (int16_t)(((uint16_t)(buf[1]) << 8) | 
                  ((uint16_t)(0xF) << 12) | (buf[0] << 0));                            /* get the level */
@@ -1164,7 +1164,7 @@ uint8_t amg8833_get_interrupt_hysteresis_level(amg8833_handle_t *handle, int16_t
        
         return 1;                                                                     /* return error */
     }
-    if ((buf[1] & (1 << 3)) != 0)                                                     /* check negtive */
+    if ((buf[1] & (1 << 3)) != 0)                                                     /* check negative */
     {
         *level = (int16_t)(((uint16_t)(buf[1]) << 8) | 
                  ((uint16_t)(0xF) << 12) | (buf[0] << 0));                            /* get the level */
@@ -1234,8 +1234,8 @@ uint8_t amg8833_interrupt_level_convert_to_data(amg8833_handle_t *handle, int16_
 /**
  * @brief      read the temperature
  * @param[in]  *handle points to an amg8833 handle structure
- * @param[out] *raw points to a raw temperatue buffer
- * @param[out] *temp points to a converted temperatue buffer
+ * @param[out] *raw points to a raw temperature buffer
+ * @param[out] *temp points to a converted temperature buffer
  * @return     status code
  *             - 0 success
  *             - 1 read temperature failed
@@ -1274,7 +1274,7 @@ uint8_t amg8833_read_temperature(amg8833_handle_t *handle, int16_t *raw, float *
     }
     *raw = (int16_t)(((uint16_t)(buf[1] & 0xF) << 8) | (buf[0] << 0));               /* get the raw */
     data = (int16_t)(((uint16_t)(buf[1] & 0x7) << 8) | (buf[0] << 0));               /* get the raw */
-    if ((buf[1] & 0x8) != 0)                                                         /* if negtive */
+    if ((buf[1] & 0x8) != 0)                                                         /* if negative */
     {
         data = data * (-1);                                                          /* x (-1) */
     }
@@ -1505,7 +1505,7 @@ uint8_t amg8833_info(amg8833_info_t *info)
     info->max_current_ma = MAX_CURRENT;                             /* set maximum current */
     info->temperature_max = TEMPERATURE_MAX;                        /* set minimal temperature */
     info->temperature_min = TEMPERATURE_MIN;                        /* set maximum temperature */
-    info->driver_version = DRIVER_VERSION;                          /* set driver verison */
+    info->driver_version = DRIVER_VERSION;                          /* set driver version */
     
     return 0;                                                       /* success return 0 */
 }

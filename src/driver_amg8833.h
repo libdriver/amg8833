@@ -322,8 +322,8 @@ uint8_t amg8833_deinit(amg8833_handle_t *handle);
 /**
  * @brief      read the temperature
  * @param[in]  *handle points to an amg8833 handle structure
- * @param[out] *raw points to a raw temperatue buffer
- * @param[out] *temp points to a converted temperatue buffer
+ * @param[out] *raw points to a raw temperature buffer
+ * @param[out] *temp points to a converted temperature buffer
  * @return     status code
  *             - 0 success
  *             - 1 read temperature failed
