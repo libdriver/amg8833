@@ -143,7 +143,7 @@ uint8_t amg8833(uint8_t argc, char **argv)
         {"times", required_argument, NULL, 6},
         {NULL, 0, NULL, 0},
     };
-    char type[33] = "unknow";
+    char type[33] = "unknown";
     uint32_t times = 3;
     amg8833_address_t addr = AMG8833_ADDRESS_0;
     amg8833_interrupt_mode_t mode = AMG8833_INTERRUPT_MODE_ABSOLUTE;
@@ -588,7 +588,7 @@ int main(uint8_t argc, char **argv)
     }
     else
     {
-        amg8833_interface_debug_print("amg8833: unknow status code.\n");
+        amg8833_interface_debug_print("amg8833: unknown status code.\n");
     }
 
     return 0;

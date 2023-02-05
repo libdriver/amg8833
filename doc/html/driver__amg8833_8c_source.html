@@ -780,7 +780,7 @@ $(document).ready(function(){initNavTree('driver__amg8833_8c_source.html',''); i
 <div class="line"><a name="l00970"></a><span class="lineno">  970</span>&#160;       </div>
 <div class="line"><a name="l00971"></a><span class="lineno">  971</span>&#160;        <span class="keywordflow">return</span> 1;                                                                     <span class="comment">/* return error */</span></div>
 <div class="line"><a name="l00972"></a><span class="lineno">  972</span>&#160;    }</div>
-<div class="line"><a name="l00973"></a><span class="lineno">  973</span>&#160;    <span class="keywordflow">if</span> ((buf[1] &amp; (1 &lt;&lt; 3)) != 0)                                                     <span class="comment">/* check negtive */</span></div>
+<div class="line"><a name="l00973"></a><span class="lineno">  973</span>&#160;    <span class="keywordflow">if</span> ((buf[1] &amp; (1 &lt;&lt; 3)) != 0)                                                     <span class="comment">/* check negative */</span></div>
 <div class="line"><a name="l00974"></a><span class="lineno">  974</span>&#160;    {</div>
 <div class="line"><a name="l00975"></a><span class="lineno">  975</span>&#160;        *level = (int16_t)(((uint16_t)(buf[1]) &lt;&lt; 8) | </div>
 <div class="line"><a name="l00976"></a><span class="lineno">  976</span>&#160;                 ((uint16_t)(0xF) &lt;&lt; 12) | (buf[0] &lt;&lt; 0));                            <span class="comment">/* get the level */</span></div>
@@ -855,7 +855,7 @@ $(document).ready(function(){initNavTree('driver__amg8833_8c_source.html',''); i
 <div class="line"><a name="l01067"></a><span class="lineno"> 1067</span>&#160;       </div>
 <div class="line"><a name="l01068"></a><span class="lineno"> 1068</span>&#160;        <span class="keywordflow">return</span> 1;                                                                     <span class="comment">/* return error */</span></div>
 <div class="line"><a name="l01069"></a><span class="lineno"> 1069</span>&#160;    }</div>
-<div class="line"><a name="l01070"></a><span class="lineno"> 1070</span>&#160;    <span class="keywordflow">if</span> ((buf[1] &amp; (1 &lt;&lt; 3)) != 0)                                                     <span class="comment">/* check negtive */</span></div>
+<div class="line"><a name="l01070"></a><span class="lineno"> 1070</span>&#160;    <span class="keywordflow">if</span> ((buf[1] &amp; (1 &lt;&lt; 3)) != 0)                                                     <span class="comment">/* check negative */</span></div>
 <div class="line"><a name="l01071"></a><span class="lineno"> 1071</span>&#160;    {</div>
 <div class="line"><a name="l01072"></a><span class="lineno"> 1072</span>&#160;        *level = (int16_t)(((uint16_t)(buf[1]) &lt;&lt; 8) | </div>
 <div class="line"><a name="l01073"></a><span class="lineno"> 1073</span>&#160;                 ((uint16_t)(0xF) &lt;&lt; 12) | (buf[0] &lt;&lt; 0));                            <span class="comment">/* get the level */</span></div>
@@ -930,7 +930,7 @@ $(document).ready(function(){initNavTree('driver__amg8833_8c_source.html',''); i
 <div class="line"><a name="l01164"></a><span class="lineno"> 1164</span>&#160;       </div>
 <div class="line"><a name="l01165"></a><span class="lineno"> 1165</span>&#160;        <span class="keywordflow">return</span> 1;                                                                     <span class="comment">/* return error */</span></div>
 <div class="line"><a name="l01166"></a><span class="lineno"> 1166</span>&#160;    }</div>
-<div class="line"><a name="l01167"></a><span class="lineno"> 1167</span>&#160;    <span class="keywordflow">if</span> ((buf[1] &amp; (1 &lt;&lt; 3)) != 0)                                                     <span class="comment">/* check negtive */</span></div>
+<div class="line"><a name="l01167"></a><span class="lineno"> 1167</span>&#160;    <span class="keywordflow">if</span> ((buf[1] &amp; (1 &lt;&lt; 3)) != 0)                                                     <span class="comment">/* check negative */</span></div>
 <div class="line"><a name="l01168"></a><span class="lineno"> 1168</span>&#160;    {</div>
 <div class="line"><a name="l01169"></a><span class="lineno"> 1169</span>&#160;        *level = (int16_t)(((uint16_t)(buf[1]) &lt;&lt; 8) | </div>
 <div class="line"><a name="l01170"></a><span class="lineno"> 1170</span>&#160;                 ((uint16_t)(0xF) &lt;&lt; 12) | (buf[0] &lt;&lt; 0));                            <span class="comment">/* get the level */</span></div>
@@ -1006,7 +1006,7 @@ $(document).ready(function(){initNavTree('driver__amg8833_8c_source.html',''); i
 <div class="line"><a name="l01274"></a><span class="lineno"> 1274</span>&#160;    }</div>
 <div class="line"><a name="l01275"></a><span class="lineno"> 1275</span>&#160;    *raw = (int16_t)(((uint16_t)(buf[1] &amp; 0xF) &lt;&lt; 8) | (buf[0] &lt;&lt; 0));               <span class="comment">/* get the raw */</span></div>
 <div class="line"><a name="l01276"></a><span class="lineno"> 1276</span>&#160;    data = (int16_t)(((uint16_t)(buf[1] &amp; 0x7) &lt;&lt; 8) | (buf[0] &lt;&lt; 0));               <span class="comment">/* get the raw */</span></div>
-<div class="line"><a name="l01277"></a><span class="lineno"> 1277</span>&#160;    <span class="keywordflow">if</span> ((buf[1] &amp; 0x8) != 0)                                                         <span class="comment">/* if negtive */</span></div>
+<div class="line"><a name="l01277"></a><span class="lineno"> 1277</span>&#160;    <span class="keywordflow">if</span> ((buf[1] &amp; 0x8) != 0)                                                         <span class="comment">/* if negative */</span></div>
 <div class="line"><a name="l01278"></a><span class="lineno"> 1278</span>&#160;    {</div>
 <div class="line"><a name="l01279"></a><span class="lineno"> 1279</span>&#160;        data = data * (-1);                                                          <span class="comment">/* x (-1) */</span></div>
 <div class="line"><a name="l01280"></a><span class="lineno"> 1280</span>&#160;    }</div>
@@ -1168,7 +1168,7 @@ $(document).ready(function(){initNavTree('driver__amg8833_8c_source.html',''); i
 <div class="line"><a name="l01505"></a><span class="lineno"> 1505</span>&#160;    info-&gt;<a class="code" href="structamg8833__info__s.html#a9db82802561bf22d799b03a345f1d1dc">max_current_ma</a> = <a class="code" href="driver__amg8833_8c.html#a2989837a37d6d63b59c6dd541b785435">MAX_CURRENT</a>;                             <span class="comment">/* set maximum current */</span></div>
 <div class="line"><a name="l01506"></a><span class="lineno"> 1506</span>&#160;    info-&gt;<a class="code" href="structamg8833__info__s.html#a3366a5dce9b829e03c3d321c2b4df3f6">temperature_max</a> = <a class="code" href="driver__amg8833_8c.html#a90c0b20d54005712fcc8cb01281360e9">TEMPERATURE_MAX</a>;                        <span class="comment">/* set minimal temperature */</span></div>
 <div class="line"><a name="l01507"></a><span class="lineno"> 1507</span>&#160;    info-&gt;<a class="code" href="structamg8833__info__s.html#a8f9dbe66ac0b66ebae0a36fcb4ba368e">temperature_min</a> = <a class="code" href="driver__amg8833_8c.html#aab353db5bf4eb787f86a2080f609a551">TEMPERATURE_MIN</a>;                        <span class="comment">/* set maximum temperature */</span></div>
-<div class="line"><a name="l01508"></a><span class="lineno"> 1508</span>&#160;    info-&gt;<a class="code" href="structamg8833__info__s.html#a41b0bd442708b70d252c50b92c75265a">driver_version</a> = <a class="code" href="driver__amg8833_8c.html#ae578001fe043b4cca7a0edd801cfe9c4">DRIVER_VERSION</a>;                          <span class="comment">/* set driver verison */</span></div>
+<div class="line"><a name="l01508"></a><span class="lineno"> 1508</span>&#160;    info-&gt;<a class="code" href="structamg8833__info__s.html#a41b0bd442708b70d252c50b92c75265a">driver_version</a> = <a class="code" href="driver__amg8833_8c.html#ae578001fe043b4cca7a0edd801cfe9c4">DRIVER_VERSION</a>;                          <span class="comment">/* set driver version */</span></div>
 <div class="line"><a name="l01509"></a><span class="lineno"> 1509</span>&#160;    </div>
 <div class="line"><a name="l01510"></a><span class="lineno"> 1510</span>&#160;    <span class="keywordflow">return</span> 0;                                                       <span class="comment">/* success return 0 */</span></div>
 <div class="line"><a name="l01511"></a><span class="lineno"> 1511</span>&#160;}</div>
