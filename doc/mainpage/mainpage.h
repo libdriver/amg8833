@@ -1,6 +1,6 @@
 /**
  * @mainpage  LibDriver AMG8833
- * @brief     libdriver amg8833 is a full function driver of amg8833 and it can run in both MCU and Linux platform.
+ * @brief     LibDriver AMG8833 is a full function driver of AMG8833 and it can run in both MCU and Linux platform.
  * @version   1.0.0
  * @author    Shifeng Li
  *
