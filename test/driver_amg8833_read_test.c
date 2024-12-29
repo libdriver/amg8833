@@ -42,8 +42,8 @@ static float gs_temp[8][8];               /**< temperature buffer */
 
 /**
  * @brief     read test
- * @param[in] addr_pin is the iic device address
- * @param[in] times is the read times
+ * @param[in] addr_pin iic device address
+ * @param[in] times test times
  * @return    status code
  *            - 0 success
  *            - 1 test failed

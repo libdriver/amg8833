@@ -52,7 +52,7 @@ extern "C"{
 
 /**
  * @brief     register test
- * @param[in] addr_pin is the iic device address
+ * @param[in] addr_pin iic device address
  * @return    status code
  *            - 0 success
  *            - 1 test failed

@@ -58,7 +58,7 @@ extern "C"{
 
 /**
  * @brief     basic example init
- * @param[in] addr_pin is the iic device address
+ * @param[in] addr_pin iic device address
  * @return    status code
  *            - 0 success
  *            - 1 init failed
@@ -77,7 +77,7 @@ uint8_t amg8833_basic_deinit(void);
 
 /**
  * @brief      basic example read temperature array
- * @param[out] **temp points to a temperature array
+ * @param[out] **temp pointer to a temperature array
  * @return     status code
  *             - 0 success
  *             - 1 read temperature array failed
@@ -87,7 +87,7 @@ uint8_t amg8833_basic_read_temperature_array(float temp[8][8]);
 
 /**
  * @brief      basic example read temperature
- * @param[out] *temp points to a temperature buffer
+ * @param[out] *temp pointer to a temperature buffer
  * @return     status code
  *             - 0 success
  *             - 1 read temperature failed

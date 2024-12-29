@@ -66,12 +66,12 @@ uint8_t amg8833_interrupt_irq_handler(void);
 
 /**
  * @brief     interrupt example init
- * @param[in] addr_pin is the iic device address
- * @param[in] mode is the interrupt mode
- * @param[in] high_level is the high level
- * @param[in] low_level is the low level
- * @param[in] hysteresis_level is the hysteresis level
- * @param[in] *callback points to a callback function
+ * @param[in] addr_pin iic device address
+ * @param[in] mode interrupt mode
+ * @param[in] high_level high level
+ * @param[in] low_level low level
+ * @param[in] hysteresis_level hysteresis level
+ * @param[in] *callback pointer to a callback function
  * @return    status code
  *            - 0 success
  *            - 1 init failed
@@ -95,7 +95,7 @@ uint8_t amg8833_interrupt_deinit(void);
 
 /**
  * @brief      interrupt example get interrupt table
- * @param[out] **table points to a table buffer
+ * @param[out] **table pointer to a table buffer
  * @return     status code
  *             - 0 success
  *             - 1 get interrupt table failed
@@ -105,7 +105,7 @@ uint8_t amg8833_interrupt_get_table(uint8_t table[8][1]);
 
 /**
  * @brief      interrupt example read temperature array
- * @param[out] **temp points to a temperature array
+ * @param[out] **temp pointer to a temperature array
  * @return     status code
  *             - 0 success
  *             - 1 read temperature array failed
@@ -115,7 +115,7 @@ uint8_t amg8833_interrupt_read_temperature_array(float temp[8][8]);
 
 /**
  * @brief      interrupt example read temperature
- * @param[out] *temp points to a temperature buffer
+ * @param[out] *temp pointer to a temperature buffer
  * @return     status code
  *             - 0 success
  *             - 1 read temperature failed

@@ -59,12 +59,12 @@ uint8_t amg8833_interrupt_test_irq_handler(void)
 
 /**
  * @brief     interrupt test
- * @param[in] addr_pin is the iic device address
- * @param[in] mode is the interrupt mode
- * @param[in] high_level is the high level
- * @param[in] low_level is the low level
- * @param[in] hysteresis_level is the hysteresis level
- * @param[in] times is the read times
+ * @param[in] addr_pin iic device address
+ * @param[in] mode interrupt mode
+ * @param[in] high_level high level
+ * @param[in] low_level low level
+ * @param[in] hysteresis_level hysteresis level
+ * @param[in] times test times
  * @return    status code
  *            - 0 success
  *            - 1 test failed
