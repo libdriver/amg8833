@@ -138,7 +138,7 @@ amg8833: min supply voltage is 3.0V.
 amg8833: max supply voltage is 3.6V.
 amg8833: max current is 5.00mA.
 amg8833: max temperature is 80.0C.
-amg8833: min temperature is -20.0C.
+amg8833: min temperature is 0.0C.
 ```
 
 ```shell

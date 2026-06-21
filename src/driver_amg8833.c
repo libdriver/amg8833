@@ -44,7 +44,7 @@
 #define SUPPLY_VOLTAGE_MIN        3.0f                       /**< chip min supply voltage */
 #define SUPPLY_VOLTAGE_MAX        3.6f                       /**< chip max supply voltage */
 #define MAX_CURRENT               5.0f                       /**< chip max current */
-#define TEMPERATURE_MIN           -20.0f                     /**< chip min operating temperature */
+#define TEMPERATURE_MIN           0.0f                       /**< chip min operating temperature */
 #define TEMPERATURE_MAX           80.0f                      /**< chip max operating temperature */
 #define DRIVER_VERSION            1000                       /**< driver version */
 
@@ -819,6 +819,8 @@ uint8_t amg8833_set_average_mode(amg8833_handle_t *handle, amg8833_average_mode_
 {
     uint8_t res;
     uint8_t prev;
+    uint8_t i;
+    uint8_t unlock_seq[] = {0x50, 0x45, 0x57};
     
     if (handle == NULL)                                                            /* check handle */
     {
@@ -827,6 +829,18 @@ uint8_t amg8833_set_average_mode(amg8833_handle_t *handle, amg8833_average_mode_
     if (handle->inited != 1)                                                       /* check handle initialization */
     {
         return 3;                                                                  /* return error */
+    }
+    
+    for (i = 0; i < 3; i++)                                                        /* write unlock seq */
+    {
+        prev = unlock_seq[i];                                                      /* set seq */
+        res = a_amg8833_iic_write(handle, 0x1F, &prev, 1);                         /* write command */
+        if (res != 0)                                                              /* check result */
+        {
+            handle->debug_print("amg8833: write unlock sequence failed.\n");       /* write unlock sequence failed */
+            
+            return 1;                                                              /* return error */
+        }
     }
     
     res = a_amg8833_iic_read(handle, AMG8833_REG_AVE, (uint8_t *)&prev, 1);        /* read ave register */
@@ -843,6 +857,15 @@ uint8_t amg8833_set_average_mode(amg8833_handle_t *handle, amg8833_average_mode_
     {
         handle->debug_print("amg8833: write ave register failed.\n");              /* write ave register failed */
        
+        return 1;                                                                  /* return error */
+    }
+    
+    prev = 0x00;                                                                   /* set lock seq */
+    res = a_amg8833_iic_write(handle, 0x1F, &prev, 1);                             /* write command */
+    if (res != 0)                                                                  /* check result */
+    {
+        handle->debug_print("amg8833: write lock sequence failed.\n");             /* write lock sequence failed */
+        
         return 1;                                                                  /* return error */
     }
     
