@@ -1351,9 +1351,12 @@ uint8_t amg8833_read_temperature_array(amg8833_handle_t *handle, int16_t raw[8][
     {
         for (j = 0; j < 8; j++)                                                             /* run 8 times */
         {
-            raw[7 - i][7 - j] = (int16_t)(((uint16_t)buf[i * 16 + j * 2 + 1] << 8) |        /* get raw data */
-                                                     buf[i * 16 + j * 2 + 0]);              /* get raw data */
-            temp[7 - i][7 - j] = (float)raw[7 - i][7 - j] * 0.25f;                          /* get converted temperature */
+            uint16_t u = (uint16_t)(((uint16_t)(buf[i * 16 + j * 2 + 1] & 0x0F) << 8) | 
+                                                buf[i * 16 + j * 2 + 0]);                   /* get u */
+            int16_t  v = (int16_t)((u & 0x0800U) ? (u | 0xF000U) : u);                      /* get v */
+            
+            raw[7 - i][7 - j] = v;                                                          /* get raw data */
+            temp[7 - i][7 - j] = (float)v * 0.25f;                                          /* get converted temperature */
         }
     }
 
