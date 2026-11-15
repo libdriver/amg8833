@@ -301,11 +301,11 @@ uint8_t amg8833_deinit(amg8833_handle_t *handle)
     {
         handle->debug_print("amg8833: iic deinit failed.\n");                       /* iic deinit failed */
        
-        return 4;                                                                   /* return error */
+        return 1;                                                                   /* return error */
     }
     else
     {
-        handle->iic_init = 0;                                                       /* flag close */
+        handle->inited = 0;                                                         /* flag closed */
     
         return 0;                                                                   /* success return 0 */
     }
