@@ -302,11 +302,11 @@ $(function(){initNavTree('driver__amg8833_8c_source.html','',''); });
 <div class="line"><a id="l00301" name="l00301"></a><span class="lineno">  301</span>    {</div>
 <div class="line"><a id="l00302" name="l00302"></a><span class="lineno">  302</span>        handle-&gt;<a class="code hl_variable" href="structamg8833__handle__s.html#a769d5b3a6c14790a0e126e8fe70b384b">debug_print</a>(<span class="stringliteral">&quot;amg8833: iic deinit failed.\n&quot;</span>);                       <span class="comment">/* iic deinit failed */</span></div>
 <div class="line"><a id="l00303" name="l00303"></a><span class="lineno">  303</span>       </div>
-<div class="line"><a id="l00304" name="l00304"></a><span class="lineno">  304</span>        <span class="keywordflow">return</span> 4;                                                                   <span class="comment">/* return error */</span></div>
+<div class="line"><a id="l00304" name="l00304"></a><span class="lineno">  304</span>        <span class="keywordflow">return</span> 1;                                                                   <span class="comment">/* return error */</span></div>
 <div class="line"><a id="l00305" name="l00305"></a><span class="lineno">  305</span>    }</div>
 <div class="line"><a id="l00306" name="l00306"></a><span class="lineno">  306</span>    <span class="keywordflow">else</span></div>
 <div class="line"><a id="l00307" name="l00307"></a><span class="lineno">  307</span>    {</div>
-<div class="line"><a id="l00308" name="l00308"></a><span class="lineno">  308</span>        handle-&gt;<a class="code hl_variable" href="structamg8833__handle__s.html#a8826dd07625f8d90859ce9bd09628d61">iic_init</a> = 0;                                                       <span class="comment">/* flag close */</span></div>
+<div class="line"><a id="l00308" name="l00308"></a><span class="lineno">  308</span>        handle-&gt;<a class="code hl_variable" href="structamg8833__handle__s.html#a19bedf28d2b9748f6a62d9ae93f4e68f">inited</a> = 0;                                                         <span class="comment">/* flag closed */</span></div>
 <div class="line"><a id="l00309" name="l00309"></a><span class="lineno">  309</span>    </div>
 <div class="line"><a id="l00310" name="l00310"></a><span class="lineno">  310</span>        <span class="keywordflow">return</span> 0;                                                                   <span class="comment">/* success return 0 */</span></div>
 <div class="line"><a id="l00311" name="l00311"></a><span class="lineno">  311</span>    }</div>

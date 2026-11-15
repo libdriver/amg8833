@@ -1,3 +1,9 @@
+## 1.0.10 (2026-11-16)
+
+## Bug Fixes
+
+- fix deinit bugs
+
 ## 1.0.9 (2026-10-16)
 
 ## Bug Fixes
